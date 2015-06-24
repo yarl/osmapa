@@ -39,15 +39,18 @@
 
   <md-toolbar layout="row">
     <md-button ng-click="toggleMenu()">
-      <md-icon md-svg-icon="navigation:menu"></md-icon> <span class="toolbar-label">Menu</span>
+      <md-icon class="material-icons step" aria-label="Menu">menu</md-icon>
+      <span class="toolbar-label">Menu</span>
     </md-button>
     <md-button ng-click="showLayerChange($event)">
-      <md-icon md-svg-icon="maps:layers" ></md-icon> <span class="toolbar-label">Layers</span>
+      <md-icon class="material-icons step" aria-label="Layers">layers</md-icon>
+      <span class="toolbar-label">Layers</span>
     </md-button>
     <h1>osmapa</h1>
     <md-button></md-button>
     <md-button ng-click="action = 'geoloc'">
-      <md-icon md-svg-icon="maps:my_location" ></md-icon> <span class="toolbar-label">Location</span>
+      <md-icon class="material-icons step" aria-label="Location">my_location</md-icon>
+      <span class="toolbar-label">Location</span>
     </md-button>
   </md-toolbar>
 
