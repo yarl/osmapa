@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   angular
-          .module('osmapa.map')
+          .module('osmapa.main')
           .controller('LayersController', LayersController);
   
   function LayersController($scope, layers, mmap) {

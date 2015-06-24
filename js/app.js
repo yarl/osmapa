@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   angular
-      .module('osmapaApp', ['ngMaterial', 'osmapa.map', 'osmapa.search', 'osmapa.sidebar'])
+      .module('osmapaApp', ['ngMaterial', 'osmapa.main', 'osmapa.search', 'osmapa.sidebar'])
       .config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('default')
                 .primaryPalette('green')

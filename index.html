@@ -16,21 +16,20 @@
     <link rel="stylesheet" href="css/animations.css"/>
   </head>
 
-  <body ng-app="osmapaApp" layout="column" ng-controller="MapController" ng-cloak>
+  <body ng-app="osmapaApp" layout="column" ng-controller="MainController as main" ng-cloak>
 
-    <div class="search-container" layout-padding layout="row" ng-controller="SearchController">
-      <md-autocomplete md-selected-item="search"
-                       md-search-text-change="searchTextChange(searchText)"
-                       md-search-text="searchText"
-                       md-selected-item-change="selectedItemChange(item)"
-                       md-items="item in querySearch(searchText)"
+    <div class="search-container" layout-padding layout="row" ng-controller="SearchController as search">
+      <md-autocomplete md-selected-item="search.search"
+                       md-search-text="search.searchText"
+                       md-selected-item-change="search.selectedItemChange(item)"
+                       md-items="item in search.querySearch(search.searchText)"
                        md-item-text="item.properties.name"
-                       placeholder=""
+                       placeholder="Search"
                        ng-model-options="{debounce: 250}">
         <div class="search-suggestion">
           <span class="search-suggestion-type" >{{item.properties.osm_key}} \ {{item.properties.osm_value}}</span>
-          <span class="search-suggestion-name" md-highlight-text="searchText" md-highlight-flags="^i">{{getName(item)}}</span>
-          <span class="search-suggestion-name search-suggestion-address">{{getAddress(item)}}</span>
+          <span class="search-suggestion-name" md-highlight-text="searchText" md-highlight-flags="^i">{{search.getName(item)}}</span>
+          <span class="search-suggestion-name search-suggestion-address">{{search.getAddress(item)}}</span>
         </div>
       </md-autocomplete>
     </div>
@@ -38,17 +37,16 @@
   <md-whiteframe class="point-info" layout layout-align="center center" ng-show="false"></md-whiteframe>
 
   <md-toolbar layout="row">
-    <md-button ng-click="toggleMenu()">
+    <md-button ng-click="main.showMenu()">
       <md-icon class="material-icons step" aria-label="Menu">menu</md-icon>
       <span class="toolbar-label">Menu</span>
     </md-button>
-    <md-button ng-click="showLayerChange($event)">
+    <md-button ng-click="main.showLayerSwitcher($event)">
       <md-icon class="material-icons step" aria-label="Layers">layers</md-icon>
       <span class="toolbar-label">Layers</span>
     </md-button>
     <h1>osmapa</h1>
-    <md-button></md-button>
-    <md-button ng-click="action = 'geoloc'">
+    <md-button ng-click="main.action = 'geoloc'">
       <md-icon class="material-icons step" aria-label="Location">my_location</md-icon>
       <span class="toolbar-label">Location</span>
     </md-button>
@@ -73,7 +71,7 @@
     </div>
     <md-content flex id="content">
       <md-card>
-        <div ng-leaflet ng-model="map" ng-layers="layers" ng-action="action"></div>
+        <div ng-leaflet ng-model="main.map" ng-layers="main.layers" ng-action="main.action"></div>
       </md-card>
       <footer>© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a></footer>
     </md-content>
@@ -86,7 +84,7 @@
   <script src="vendor/leaflet/leaflet.js"></script>
 
   <script src="js/app.js"></script>
-  <script src="js/map/mapCtrl.js"></script>
+  <script src="js/main/mainCtrl.js"></script>
   <script src="js/layers/layersCtrl.js"></script>
   <script src="js/search/searchCtrl.js"></script>
   <script src="js/search/searchService.js"></script>

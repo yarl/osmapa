@@ -1,3 +1,5 @@
+/* global angular */
+
 (function () {
   'use strict';
   angular
@@ -5,36 +7,18 @@
           .controller('SearchController', SearchController);
 
   function SearchController($scope, searchService) {
-    var _parent = $scope.$parent;
-    $scope.search = "";
-
-    $scope.querySearch = function (query) {
-      var promise;
-      promise = searchService.search(query, {
-        lat: $scope.map.lat,
-        lng: $scope.map.lng
-      }).then(function (response) {
-        return response;
-      });
-      return promise;
-    };
-
-    $scope.getName = function (item) {
-      var prop = item.properties;
-      if (prop.name) {
-        return prop.name;
-      }
-      if (prop.street) {
-        return prop.street + " " + prop.housenumber;
-      }
-      if (prop.city) {
-        return prop.city;
-      }
-
-      return "?";
-    }
-
-    $scope.getAddress = function (item) {
+    var search = this;
+    var main = $scope.main;
+    
+    search.getAddress = getAddress;
+    search.getName = getName;
+    search.querySearch = querySearch;
+    search.search = "";
+    search.selectedItemChange = selectedItemChange;
+    
+    ////////////
+    
+    function getAddress(item) {
       var prop = item.properties;
       var result = [];
 
@@ -48,29 +32,47 @@
       result.push(prop.state);
       result.push(prop.country);
 
-      for (var i = 0, max = result.length; i < max; i++) {
-        if (angular.isUndefined(result[i])) {
-          result.splice(i, 1);
-        }
-      }
+      result = result.filter(function(current) {
+          return current !== undefined;
+      });
 
       return result.join(", ");
     };
-
-    $scope.searchTextChange = function (text) {
-      //$log.info('Text changed to ' + text);
+    
+    function getName(item) {
+      var prop = item.properties;
+      if (prop.name) {
+        return prop.name;
+      }
+      if (prop.street) {
+        return prop.street + " " + prop.housenumber;
+      }
+      if (prop.city) {
+        return prop.city;
+      }
+      return "?";
+    }
+    
+    function querySearch(query) {
+      var promise;
+      promise = searchService.search(query, {
+        lat: main.map.lat,
+        lng: main.map.lng
+      }).then(function (response) {
+        return response;
+      });
+      return promise;
     };
-
-    $scope.selectedItemChange = function (item) {
+    
+    function selectedItemChange(item) {
       if (item) {
-
         if (item.properties.extent) {
           var bbox = item.properties.extent;
-          _parent.action = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
+          main.action = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
         } else {
-          _parent.map.lat = item.geometry.coordinates[1];
-          _parent.map.lng = item.geometry.coordinates[0];
-          _parent.map.zoom = 18;
+          main.map.lat = item.geometry.coordinates[1];
+          main.map.lng = item.geometry.coordinates[0];
+          main.map.zoom = 18;
         }
       }
     };

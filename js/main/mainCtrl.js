@@ -1,23 +1,33 @@
 (function () {
   'use strict';
   angular
-          .module('osmapa.map', ['ngMaterial'])
-          .controller('MapController', MapController);
+          .module('osmapa.main', ['ngMaterial'])
+          .controller('MainController', MainController);
 
-  function MapController($scope, $q, $mdSidenav, $mdBottomSheet, $log, $timeout) {
-    $scope.show = {
+  function MainController($scope, $mdSidenav, $mdBottomSheet) {
+    var main = this;
+    
+    main.action = [];
+    main.map = {};
+    main.layers = [];
+    main.show = {};
+    main.showLayerSwitcher = showLayerSwitcher;
+    main.showMenu = showMenu;
+    
+    ////////////
+    
+    main.show = {
       search: false
     };
 
-    $scope.map = {
+    main.map = {
       lat: 50.8545,
       lng: 19.2439,
       zoom: 10,
       layer: 'os'
     };
-    $scope.action = [];
 
-    $scope.layers = [{
+    main.layers = [{
         name: 'Osmapa Topo',
         shortcut: 'os',
         url: 'http://{s}.tile.openstreetmap.pl/osmapa.pl/{z}/{x}/{y}.png',
@@ -44,21 +54,19 @@
         attribution: 'Tiles courtesy of Humanitarian OpenStreetMap Team'
       }];
 
-    /* right menu */
+    ////////////
 
-    $scope.toggleMenu = function () {
+    function showMenu() {
       $mdSidenav('left').toggle();
     };
 
-    /* layers */
-
-    $scope.showLayerChange = function ($event) {
+    function showLayerSwitcher($event) {
       $mdBottomSheet.show({
         templateUrl: 'js/layers/layers.tpl.html',
         controller: 'LayersController',
         locals: {
-          layers: $scope.layers,
-          mmap: $scope.map
+          layers: main.layers,
+          mmap: main.map
         },
         targetEvent: $event,
         preserveScope: true
