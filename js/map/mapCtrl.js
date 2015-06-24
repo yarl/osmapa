@@ -1,9 +1,10 @@
-angular.module('osmapa.map', ['ngMaterial']).controller('MapController', [
-  '$scope', '$q', '$mdSidenav', '$mdBottomSheet', '$log', '$timeout',
-  function ($scope, $q, $mdSidenav, $mdBottomSheet, $log, $timeout) {
+(function () {
+  'use strict';
+  angular
+          .module('osmapa.map', ['ngMaterial'])
+          .controller('MapController', MapController);
 
-    /* vars */
-
+  function MapController($scope, $q, $mdSidenav, $mdBottomSheet, $log, $timeout) {
     $scope.show = {
       search: false
     };
@@ -66,5 +67,4 @@ angular.module('osmapa.map', ['ngMaterial']).controller('MapController', [
       });
     };
   }
-]);
-
+})();

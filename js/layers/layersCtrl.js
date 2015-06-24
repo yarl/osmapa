@@ -1,8 +1,12 @@
-angular.module('osmapa.map').controller('LayersController', [
-  '$scope', 'layers', 'mmap',
-  function ($scope, layers, mmap) {
-
+(function () {
+  'use strict';
+  angular
+          .module('osmapa.map')
+          .controller('LayersController', LayersController);
+  
+  function LayersController($scope, layers, mmap) {
     $scope.layers = layers;
+    
     $scope.selectLayer = function (layer) {
       for (var i in $scope.layers) {
         if (layer.name === $scope.layers[i].name) {
@@ -10,7 +14,6 @@ angular.module('osmapa.map').controller('LayersController', [
           return true;
         }
       }
-      
-      //$mdBottomSheet.hide(layer);
     };
-  }]);
+  }
+})();

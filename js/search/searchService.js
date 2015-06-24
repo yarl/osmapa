@@ -1,6 +1,10 @@
-angular.module('osmapa.search').service('searchService', [
-  '$q', '$http',
-  function ($q, $http) {
+(function () {
+  'use strict';
+  angular
+          .module('osmapa.search')
+          .service('searchService', searchService);
+
+  function searchService($q, $http) {
     return {
       searchNominatim: function (query) {
         var promise = $http({
@@ -26,4 +30,4 @@ angular.module('osmapa.search').service('searchService', [
       }
     };
   }
-]);
+})();

@@ -1,7 +1,10 @@
-angular.module('osmapa.search', ['ngMaterial']).controller('SearchController', [
-  '$scope', 'searchService',
-  function ($scope, searchService) {
+(function () {
+  'use strict';
+  angular
+          .module('osmapa.search', ['ngMaterial'])
+          .controller('SearchController', SearchController);
 
+  function SearchController($scope, searchService) {
     var _parent = $scope.$parent;
     $scope.search = "";
 
@@ -46,7 +49,7 @@ angular.module('osmapa.search', ['ngMaterial']).controller('SearchController', [
       result.push(prop.country);
 
       for (var i = 0, max = result.length; i < max; i++) {
-        if(angular.isUndefined(result[i])) {
+        if (angular.isUndefined(result[i])) {
           result.splice(i, 1);
         }
       }
@@ -71,4 +74,5 @@ angular.module('osmapa.search', ['ngMaterial']).controller('SearchController', [
         }
       }
     };
-  }]); 
+  }
+})();
