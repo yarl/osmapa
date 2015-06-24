@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>osmapa</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="vendor/angular-material/angular-material.css"/>
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="css/animations.css"/>
+  </head>
+
+  <body ng-app="osmapaApp" layout="column" ng-controller="MapController" ng-cloak>
+
+    <div class="search-container" layout-padding layout="row" ng-controller="SearchController">
+      <md-autocomplete md-selected-item="search"
+                       md-search-text-change="searchTextChange(searchText)"
+                       md-search-text="searchText"
+                       md-selected-item-change="selectedItemChange(item)"
+                       md-items="item in querySearch(searchText)"
+                       md-item-text="item.properties.name"
+                       placeholder=""
+                       ng-model-options="{debounce: 250}">
+        <div class="search-suggestion">
+          <span class="search-suggestion-type" >{{item.properties.osm_key}} \ {{item.properties.osm_value}}</span>
+          <span class="search-suggestion-name" md-highlight-text="searchText" md-highlight-flags="^i">{{getName(item)}}</span>
+          <span class="search-suggestion-name search-suggestion-address">{{getAddress(item)}}</span>
+        </div>
+      </md-autocomplete>
+    </div>
+
+  <md-whiteframe class="point-info" layout layout-align="center center" ng-show="false"></md-whiteframe>
+
+  <md-toolbar layout="row">
+    <md-button ng-click="toggleMenu()">
+      <md-icon md-svg-icon="navigation:menu"></md-icon> <span class="toolbar-label">Menu</span>
+    </md-button>
+    <md-button ng-click="showLayerChange($event)">
+      <md-icon md-svg-icon="maps:layers" ></md-icon> <span class="toolbar-label">Layers</span>
+    </md-button>
+    <h1>osmapa</h1>
+    <md-button></md-button>
+    <md-button ng-click="action = 'geoloc'">
+      <md-icon md-svg-icon="maps:my_location" ></md-icon> <span class="toolbar-label">Location</span>
+    </md-button>
+  </md-toolbar>
+
+  <div flex layout="row">
+    <div ng-controller="SidebarController">
+      <md-sidenav class="md-whiteframe-z2" md-component-id="left">
+        <md-list>
+          <md-subheader class="md-no-sticky">Example Items</md-subheader>
+          <md-list-item ng-repeat="setting in settings">
+            <md-icon class="material-icons">{{setting.icon}}</md-icon>
+            <p>{{setting.name}}</p>
+            <md-switch class="md-secondary" ng-model="setting.enabled"></md-switch>
+          </md-list-item>
+          <md-list-item>
+            <md-icon md-svg-icon="action:cached"></md-icon>
+            <p>Data Usages</p>
+          </md-list-item>
+        </md-list>
+      </md-sidenav>
+    </div>
+    <md-content flex id="content">
+      <md-card>
+        <div ng-leaflet ng-model="map" ng-layers="layers" ng-action="action"></div>
+      </md-card>
+      <footer>© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a></footer>
+    </md-content>
+  </div>
+
+  <script src="vendor/angular/angular.min.js"></script>
+  <script src="vendor/angular/angular-animate.min.js"></script>
+  <script src="vendor/angular/angular-aria.min.js"></script>
+  <script src="vendor/angular-material/angular-material.min.js"></script>
+  <script src="vendor/leaflet/leaflet.js"></script>
+
+  <script src="js/app.js"></script>
+  <script src="js/map/mapCtrl.js"></script>
+  <script src="js/layers/layersCtrl.js"></script>
+  <script src="js/search/searchCtrl.js"></script>
+  <script src="js/search/searchService.js"></script>
+  <script src="js/sidebar/sidebarCtrl.js"></script>
+  <script src="js/leaflet.js"></script>
+</body>
+</html>

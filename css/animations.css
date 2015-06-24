@@ -1,0 +1,54 @@
+.search-container.ng-hide-add         { 
+  -webkit-animation:0.5s hiding ease-in-out;
+  animation:0.5s hiding ease-in-out;
+}
+
+.search-container.ng-hide-remove      { 
+  
+  -webkit-animation:0.5s showing ease-in-out;
+  animation:0.5s showing ease-in-out;
+}
+
+@-webkit-keyframes showing {
+  0% {
+    top: -50px;
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes showing {
+  0% {
+    top: -50px;
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes hiding {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    right: -100px;
+    opacity: 0;
+  }
+}
+
+@keyframes hiding {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    right: -100px;
+    opacity: 0;
+  }
+}

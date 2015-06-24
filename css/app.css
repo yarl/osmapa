@@ -1,0 +1,322 @@
+html, body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+.hidden {
+  width: 0 !important;
+}
+
+.md-button {
+  font-size: 1em;
+  margin: 0;
+}
+
+/* Toolbar area */
+
+.menu {
+  background-color: transparent;
+  border: none;
+  height: 38px;
+  margin: 16px;
+  width: 36px;
+}
+
+md-toolbar {
+  padding-right: 10px;
+  padding-left: 10px;
+  font-size: 1em;
+  height: 64px;
+}
+
+md-toolbar > .md-button {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+
+md-toolbar h1 {
+  margin: auto;
+}
+
+.md-button {
+  min-width: 50px;
+}
+
+/* Sidenav area */
+
+md-list .md-button {
+  color: inherit;
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+}
+md-list .md-button.selected {
+  color: #03a9f4;
+}
+
+md-sidenav  md-list {
+  padding: 0px 0px 8px 0px;
+}
+
+/* Layer switcher */
+
+.layers-container md-list-item button.layers-button {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.layers-container md-list-item button.layers-button .md-grid-text {
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: rgba(255,255,255,.7);
+  padding: 5px;
+  width: 100%;
+}
+
+.layers-button-os {
+  background: transparent url(http://a.tile.openstreetmap.pl/osmapa.pl/15/18294/10787.png) no-repeat -48px -85px;
+}
+
+.layers-button-ma {
+  background: transparent url(http://a.tile.openstreetmap.org/15/18294/10787.png) no-repeat -48px -85px;
+}
+
+.layers-button-hb {
+  background: transparent url(http://a.tiles.wmflabs.org/hikebike/15/18294/10787.png) no-repeat -48px -85px;
+}
+
+.layers-button-pt {
+  background: transparent url(http://a.tile.thunderforest.com/transport/15/18294/10787.png) no-repeat -48px -85px;
+}
+
+.layers-button-hu {
+  background: transparent url(http://a.tile.openstreetmap.fr/hot/15/18294/10787.png) no-repeat -48px -85px;
+}
+
+/* Primary content area */
+
+#content {
+  background: #eee;
+  overflow: hidden;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+}
+
+#content > md-card {
+  background: #fff;
+  position: absolute;
+  width: calc(100% - 26px);
+  height: calc(100% - 40px);
+}
+
+#content .leaflet-container {
+  height: 100%;
+}
+
+#content .md-button.share {
+  background-color: transparent;
+  border: none;
+  width: 48px;
+  height: 48px;
+  margin: 8px auto 16px 0;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+}
+
+#content md-icon.avatar {
+  margin-top: 10px;
+}
+
+#content .md-button.share > md-icon {
+  fill:black;
+  width:36px;
+  height:36px;
+}
+
+md-button.menuBtn > md-icon {
+  fill:white;
+  width:24px;
+  height:24px;
+}
+
+#content .md-button.share:active > md-icon {
+  background-color: #dadada;
+  border-radius: 75%;
+  padding:4px;
+  transition: all 100ms ease-out 30ms;
+}
+
+#content img {
+  display: block;
+  height: auto;
+  max-width: 500px;
+}
+
+/* Utils */
+
+.content-wrapper {
+  position: relative;
+}
+
+/* Typography support coming in 0.8.0 */
+
+md-toolbar h1 {
+  font-size: 1.250em;
+  font-weight: 400;
+}
+
+.avatar {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  display: inline-block;
+  overflow: hidden;
+  margin: 0px;
+  vertical-align: middle;
+  zoom:0.70;
+  transform: translateZ(0);
+  -webkit-transform: scale(0.70);
+  -moz-transform:scale(0.70);
+}
+
+
+md-bottom-sheet  md-icon {
+  margin-right:20px;
+}
+
+md-bottom-sheet.md-grid md-list-item {
+  max-width: 200px;
+  min-width: 200px;
+  padding: 0 5px;
+}
+
+
+span.name {
+  font-weight: bold;
+  font-size:1.1em;
+  padding-left:5px;
+}
+
+md-autocomplete {
+  width: 100%;
+}
+
+.search-container {
+  position: fixed;
+  right: 13px;
+  top: 79px;
+  z-index: 5;
+  width: 400px;
+}
+
+.search-suggestion {
+  padding-top: .5rem;
+}
+
+.search-suggestion .search-suggestion-type {
+  display: block;
+  color: rgb(189,189,189);
+  line-height: 1.5;
+}
+
+.search-suggestion .search-suggestion-name {
+  line-height: 1.5;
+  width: 22rem;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-suggestion .search-suggestion-address {
+  font-size: .7rem;
+}
+
+@media screen and (max-width: 600px) {
+  .search-container {
+    width: calc(100% - 77px);
+  }
+  
+  .toolbar-label {
+    display: none;
+  }
+}
+
+.md-autocomplete-suggestions li {
+  height: 72px;
+}
+
+.md-autocomplete-suggestions.md-default-theme li .highlight {
+  color: black;
+  font-weight: bold;
+}
+
+md-autocomplete input:not(.md-input) {
+  padding-right: 35px; 
+}
+
+/* point info */
+
+.point-info {
+  position: fixed;
+  right: 13px;
+  top: 129px;
+  z-index: 4;
+  width: 384px;
+  background: white;
+  margin: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+  padding: 5px;
+}
+
+
+/* leaflet fixes */
+
+.leaflet-top, .leaflet-bottom {
+  z-index: 10;
+}
+
+.leaflet-bar .leaflet-control-zoom-in,
+.leaflet-bar .leaflet-control-zoom-out,
+.leaflet-bar .leaflet-control-zoom-in:hover,
+.leaflet-bar .leaflet-control-zoom-out:hover {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border: 0;
+}
+
+.leaflet-bar .leaflet-control-zoom-in {
+  border-radius: 2px 2px 0 0;
+}
+
+.leaflet-bar .leaflet-control-zoom-out {
+  border-radius: 0 0 2px 2px;
+} 
+
+/* footer */
+
+footer {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+}
+
+footer a {
+  color: #000;
+  text-decoration: none;
+}
