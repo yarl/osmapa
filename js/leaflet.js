@@ -30,6 +30,10 @@
             }
           };
 
+          $scope.changeOverlay = function (shortcuts) {
+            console.log(shortcuts.join('/'));
+          };
+
           $scope.checkAndChangePosition = function (position) {
             var latChange = $scope.ngModel.lat != position.lat,
                     lngChange = $scope.ngModel.lng != (position.lon || position.lng),
@@ -123,6 +127,11 @@
         scope.$watch('ngModel', function (_new, _old) {
           if (_new.layer !== _old.layer) {
             scope.changeLayer(_new.layer);
+            return;
+          }
+
+          if (_new.overlay.length !== _old.overlay.length) {
+            scope.changeOverlay(_new.overlay);
             return;
           }
 

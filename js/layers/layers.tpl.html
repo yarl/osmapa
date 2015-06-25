@@ -5,5 +5,11 @@
         <div class="md-grid-text"> {{ layer.name }} </div>
       </md-button>
     </md-list-item>
+    <div layout="column">
+    	<md-checkbox ng-model="overlays.shading" aria-label="Shading">Shading</md-checkbox>
+    	<md-checkbox ng-model="overlays.transport" aria-label="Paths">Public Transport</md-checkbox>
+    	<md-checkbox ng-model="overlays.paths" aria-label="Paths">Paths</md-checkbox>
+    </div>
   </md-list>
+
 </md-bottom-sheet>

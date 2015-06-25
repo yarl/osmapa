@@ -24,7 +24,8 @@
       lat: 50.8545,
       lng: 19.2439,
       zoom: 10,
-      layer: 'os'
+      layer: 'os',
+      overlay: []
     };
 
     main.layers = [{
@@ -66,7 +67,7 @@
         controller: 'LayersController',
         locals: {
           layers: main.layers,
-          mmap: main.map
+          map: main.map
         },
         targetEvent: $event,
         preserveScope: true
