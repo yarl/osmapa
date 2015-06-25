@@ -113,10 +113,12 @@
 
         scope.map = L.map('map', {
           minZoom: 3,
-          layers: [scope.layers, scope.overlays, scope.objects]
+          layers: [scope.layers, scope.overlays, scope.objects],
+          zoomControl: false
         }).setView([model.lat, model.lng], model.zoom);
 
         scope.map.attributionControl.setPrefix("");
+        L.control.zoom({position: 'bottomleft'}).addTo(scope.map);
         scope.changeLayer(model.layer);
         scope.updateHash();
 

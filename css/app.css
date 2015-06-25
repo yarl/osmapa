@@ -247,7 +247,8 @@ md-autocomplete {
 
 @media screen and (max-width: 600px) {
   .search-container {
-    width: calc(100% - 77px);
+    width: auto;
+    left: 13px;
   }
   
   .toolbar-label {
