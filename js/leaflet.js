@@ -87,6 +87,27 @@
             $scope.map.locate({setView: true, maxZoom: 16});
           };
 
+          $scope.mapClick = function (e) {
+            //http://codepen.io/440design/pen/iEztk
+            var ink;
+            var mapContainer = $scope.map._container;
+
+            if (!mapContainer.getElementsByClassName("map-ripple-ink").length) {
+              ink = document.createElement("span");
+              ink.className = "map-ripple-ink";
+              mapContainer.insertBefore(ink, mapContainer.childNodes[0]);    
+            }
+
+            ink = mapContainer.children[0];
+            ink.classList.remove("map-ripple-animation");
+
+            setTimeout(function() {
+              ink.style.top = e.containerPoint.y - 50 + "px";
+              ink.style.left = e.containerPoint.x - 50 + "px";
+              ink.classList.add("map-ripple-animation");
+            }, 50);
+          };
+
           $scope.$watch(function () {
             return $location.path();
           }, function (_new, _old) {
@@ -105,11 +126,14 @@
             }
           });
         }],
+      
       link: function (scope, iElement, iAttrs, ctrl) {
         var model = scope.ngModel;
         scope.layers = new L.LayerGroup();
         scope.overlays = new L.LayerGroup();
         scope.objects = new L.LayerGroup();
+
+        /* map config and init */
 
         scope.map = L.map('map', {
           minZoom: 3,
@@ -118,13 +142,22 @@
         }).setView([model.lat, model.lng], model.zoom);
 
         scope.map.attributionControl.setPrefix("");
-        L.control.zoom({position: 'bottomleft'}).addTo(scope.map);
+        scope.map.addControl(new L.Control.Zoom({position: 'bottomleft'}));
+        
         scope.changeLayer(model.layer);
         scope.updateHash();
+
+        /* events */
 
         scope.map.on('moveend', function (e) {
           scope.updateHash();
         });
+
+        scope.map.on('click', function (e) {
+          scope.mapClick(e);
+        });
+
+        /* watches */
 
         scope.$watch('ngModel', function (_new, _old) {
           if (_new.layer !== _old.layer) {
