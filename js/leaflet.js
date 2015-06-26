@@ -138,7 +138,8 @@
       scope.map = L.map('map', {
         minZoom: 3,
         layers: [scope.layers, scope.overlays, scope.objects],
-        zoomControl: false
+        zoomControl: false,
+        detectRetina: true
       }).setView([model.lat, model.lng], model.zoom);
 
       scope.map.attributionControl.setPrefix("");
