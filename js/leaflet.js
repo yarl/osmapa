@@ -5,7 +5,7 @@
           .module('osmapa.main')
           .directive('ngLeaflet', ngLeaflet);
 
-  function ngLeaflet() {
+  function ngLeaflet(searchService) {
     function ngLeafletController($scope, $location, $timeout, $rootScope) {
       var vm = $scope;
       vm._model = vm.ngModel;
@@ -155,9 +155,18 @@
       });
 
       scope.map.on('click', function (e) {
-        scope.mapClick(e);
+        if(scope.map.getZoom() > 13) {
+          scope.mapClick(e);
+          searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom());
+        }
       });
-
+      
+//      if (L.Browser.touch) {
+//        scope.map.on('contextmenu', function (e) {
+//          scope.mapClick(e);
+//        });
+//      }
+     
       /* watches */
 
       scope.$watch('ngModel', function (_new, _old) {
