@@ -30,7 +30,7 @@
       },
       overpass: function (coord, bounds, zoom) {
         // http://bit.ly/1LtYZsf
-        
+
         var latlng = L.latLng(coord.lat, coord.lng).wrap(),
                 bbox = bounds.getSouth() + "," + bounds.getWest() + "," + bounds.getNorth() + "," + bounds.getEast(),
                 radius = 10 * Math.pow(1.5, 19 - zoom),
@@ -57,6 +57,10 @@
         var uninterestingTags = ['source', 'source_ref', 'source:ref', 'history', 'attribution', 'created_by', 'tiger:county', 'tiger:tlid', 'tiger:upload_uuid', 'KSJ2:curve_id', 'KSJ2:lat', 'KSJ2:lon', 'KSJ2:coordinate', 'KSJ2:filename', 'note:ja'];
 
         function compareSize(feature1, feature2) {
+          if (!feature1.bounds || !feature2.bounds) {
+            return -1;
+          }
+          
           var width1 = feature1.bounds.maxlon - feature1.bounds.minlon,
                   height1 = feature1.bounds.maxlat - feature1.bounds.minlat,
                   area1 = width1 * height1,
@@ -106,7 +110,7 @@
           return false;
         }
 
-        $q.all(requests).then(function (results_) {
+        return $q.all(requests).then(function (results_) {
           var response = [];
           var results = {
             isin: results_.isin.statusText === "OK" ? results_.isin.data.elements : [],
@@ -127,7 +131,7 @@
             unique.push(element.id);
           });
 
-          results.isin.sort(compareSize);
+          results.isin = results.isin.sort(compareSize);
           results.isin.forEach(function (element) {
             if (unique.indexOf(element.id) < 0) {
               response.push(element);
@@ -136,8 +140,6 @@
           });
 
           return response;
-        }).then(function (result) {
-          console.log(result);
         });
       }
     };

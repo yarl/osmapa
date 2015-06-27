@@ -273,7 +273,7 @@ md-autocomplete input:not(.md-input) {
 
 /* point info */
 
-.point-info {
+.infobox-container {
   position: fixed;
   right: 13px;
   top: 129px;
@@ -286,6 +286,13 @@ md-autocomplete input:not(.md-input) {
   padding: 5px;
 }
 
+.infobox-container md-tabs {
+  width: 100%;
+}
+
+.infobox-text {
+  padding: 5px;
+}
 
 /* leaflet fixes */
 
@@ -364,4 +371,12 @@ footer a {
 }
 @keyframes ripple {
   100% {opacity: 0; transform: scale(2.5);}
+}
+
+.md-tab {
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 12px;
 }

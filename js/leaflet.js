@@ -155,18 +155,27 @@
       });
 
       scope.map.on('click', function (e) {
-        if(scope.map.getZoom() > 13) {
+        if (scope.map.getZoom() > 13) {
           scope.mapClick(e);
-          searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom());
+          searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom()).then(function (data) {
+            console.log(data);
+            ctrl.$modelValue.objects = data;
+          });
         }
       });
-      
-//      if (L.Browser.touch) {
-//        scope.map.on('contextmenu', function (e) {
-//          scope.mapClick(e);
-//        });
-//      }
-     
+
+      if (L.Browser.touch) {
+        scope.map.on('contextmenu', function (e) {
+          if (scope.map.getZoom() > 13) {
+            scope.mapClick(e);
+            searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom()).then(function (data) {
+              console.log(data);
+              ctrl.$modelValue.objects = data;
+            });
+          }
+        });
+      }
+
       /* watches */
 
       scope.$watch('ngModel', function (_new, _old) {

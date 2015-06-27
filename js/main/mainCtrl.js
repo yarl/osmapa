@@ -25,8 +25,15 @@
       lng: 19.2439,
       zoom: 10,
       layer: 'os',
-      overlay: []
+      overlay: [],
+      objects: []
     };
+    
+    $scope.$watch('main.map.objects', function (_new){
+      if(_new.lenght) {
+        main.selectedIndex = 0;
+      }
+    });
 
     main.layers = [{
         name: 'Osmapa Topo',
