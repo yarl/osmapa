@@ -13,6 +13,7 @@
     main.show = {};
     main.showLayerSwitcher = showLayerSwitcher;
     main.showMenu = showMenu;
+    main.hideInfobox = hideInfobox;
     
     ////////////
     
@@ -28,12 +29,6 @@
       overlay: [],
       objects: []
     };
-    
-    $scope.$watch('main.map.objects', function (_new){
-      if(_new.lenght) {
-        main.selectedIndex = 0;
-      }
-    });
 
     main.layers = [{
         name: 'Osmapa Topo',
@@ -61,8 +56,20 @@
         url: 'http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
         attribution: 'Tiles courtesy of Humanitarian OpenStreetMap Team'
       }];
+    
+    ////////////
+
+    $scope.$watch('main.map.objects', function (_new){
+      if(_new.lenght) {
+        main.selectedIndex = 0;
+      }
+    });
 
     ////////////
+
+    function hideInfobox() {
+      main.map.objects = [];
+    }
 
     function showMenu() {
       $mdSidenav('left').toggle();

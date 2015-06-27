@@ -283,15 +283,45 @@ md-autocomplete input:not(.md-input) {
   margin: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
-  padding: 5px;
+  padding: 0 0 5px;
+}
+
+.infobox-container md-toolbar {
+  height: 48px;
+  min-height: 48px;
+}
+
+.infobox-container .md-toolbar-tools {
+  height: 48px;
+  min-height: 48px;
+  font-size: 16px;
+  padding: 1px 0px 0 16px;
+}
+
+.infobox-container .md-toolbar-tools .md-icon-button {
+  margin: 0;
+  width: 40px;
+}
+
+.infobox-container .md-toolbar-tools md-icon {
+  font-size: 18px;
 }
 
 .infobox-container md-tabs {
   width: 100%;
 }
 
-.infobox-text {
-  padding: 5px;
+.infobox-container md-tab-content {
+  padding: 0 10px 10px 10px;
+}
+
+.infobox-loading {
+    width: 100%;
+}
+
+.infobox-loading-text {
+    padding: 15px 15px 10px 15px;
+    color: rgb(117, 117, 117);
 }
 
 /* leaflet fixes */
@@ -374,7 +404,7 @@ footer a {
 }
 
 .md-tab {
-  width: 200px;
+  width: 250px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

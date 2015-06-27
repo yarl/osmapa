@@ -157,8 +157,10 @@
       scope.map.on('click', function (e) {
         if (scope.map.getZoom() > 13) {
           scope.mapClick(e);
+          ctrl.$modelValue.loadingObjects = true;
           searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom()).then(function (data) {
             console.log(data);
+            ctrl.$modelValue.loadingObjects = false;
             ctrl.$modelValue.objects = data;
           });
         }
@@ -168,8 +170,10 @@
         scope.map.on('contextmenu', function (e) {
           if (scope.map.getZoom() > 13) {
             scope.mapClick(e);
+            ctrl.$modelValue.loadingObjects = true;
             searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom()).then(function (data) {
               console.log(data);
+              ctrl.$modelValue.loadingObjects = false;
               ctrl.$modelValue.objects = data;
             });
           }
