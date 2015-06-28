@@ -1,15 +1,25 @@
 <md-bottom-sheet class="md-grid layers-container">
-  <md-list>
-    <md-list-item ng-repeat="layer in layers">
-      <md-button class="md-grid-item-content layers-button layers-button-{{layer.shortcut}}" ng-click="selectLayer(layer)">
-        <div class="md-grid-text"> {{ layer.name }} </div>
-      </md-button>
-    </md-list-item>
-    <div layout="column">
-    	<md-checkbox ng-model="overlays.shading" aria-label="Shading">Shading</md-checkbox>
-    	<md-checkbox ng-model="overlays.transport" aria-label="Paths">Public Transport</md-checkbox>
-    	<md-checkbox ng-model="overlays.paths" aria-label="Paths">Paths</md-checkbox>
+  <div layout="row" layout-align="space-between center">
+    <div class="layers-section-layer">
+      <h2 class="md-subheader">Layers</h2>
+      <md-list>
+        <md-list-item ng-repeat="layer in layers">
+          <md-button class="md-grid-item-content layers-button" ng-click="selectLayer(layer)">
+            <div class="layers-button-background layers-button-{{layer.shortcut}}"></div>
+            <div class="md-grid-text"> {{layer.name}} </div>
+          </md-button>
+        </md-list-item>
+      </md-list>
     </div>
-  </md-list>
-
+    <div class="layers-section-overlay">
+      <h2 class="md-subheader">Overlays</h2>
+      <md-list>
+        <div layout="column">
+          <md-checkbox aria-label="Shading" ng-model="overlays.shading" ng-disabled="true">Shading</md-checkbox>
+          <md-checkbox aria-label="Transport" ng-model="overlays.transport" ng-disabled="true">Public Transport</md-checkbox>
+          <md-checkbox aria-label="Paths" ng-model="overlays.paths" ng-disabled="true">Paths</md-checkbox>
+        </div>
+      </md-list>
+    </div>
+  </div>
 </md-bottom-sheet>

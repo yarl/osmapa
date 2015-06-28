@@ -69,6 +69,18 @@ md-sidenav a {
 
 /* Layer switcher */
 
+.layers-container .md-subheader {
+  color: rgba(0,0,0,0.54);
+  line-height: normal;
+  padding-top: 20px;
+  padding-bottom: 5px;
+}
+
+.layers-container md-list {
+  margin-top: 0;
+  padding-top: 0;
+}
+
 .layers-container md-list-item button.layers-button {
   text-align: center;
   width: 100%;
@@ -86,6 +98,23 @@ md-sidenav a {
   background: rgba(255,255,255,.7);
   padding: 5px;
   width: 100%;
+}
+
+.layers-section-overlay {
+  min-width: 200px;
+  width: 300px;
+}
+
+.layers-section-overlay md-checkbox {
+  margin-bottom: 0;
+}
+
+.layers-button-background {
+  width: 190px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .layers-button-os {
@@ -208,7 +237,6 @@ md-bottom-sheet  md-icon {
 md-bottom-sheet.md-grid md-list-item {
   max-width: 200px;
   min-width: 200px;
-  padding: 0 5px;
 }
 
 

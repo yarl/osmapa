@@ -17,18 +17,6 @@
   </head>
 
   <body ng-app="osmapaApp" layout="column" ng-controller="MainController as main" ng-cloak>
-
-    <div style="position: absolute;
-         top: 84px;
-         left: 22px;
-         z-index: 10;
-         width: 250px;
-         height: 350px;
-         background-color: white;
-         padding: 0 10px;
-         overflow: auto;
-         font-size: 80%;"><pre>{{main.map| json}}</pre></div>
-
     <div class="search-container" layout-padding layout="row" ng-controller="SearchController as search">
       <md-autocomplete md-selected-item="search.search"
                        md-search-text="search.searchText"
