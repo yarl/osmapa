@@ -62,6 +62,11 @@ md-sidenav  md-list {
   padding: 0px 0px 8px 0px;
 }
 
+md-sidenav a {
+  color: rgba(0,0,0,0.54);
+  text-decoration: none;
+}
+
 /* Layer switcher */
 
 .layers-container md-list-item button.layers-button {
@@ -295,7 +300,7 @@ md-autocomplete input:not(.md-input) {
   height: 48px;
   min-height: 48px;
   font-size: 16px;
-  padding: 1px 0px 0 16px;
+  padding: 1px 0px 0 4px;
 }
 
 .infobox-container .md-toolbar-tools .md-icon-button {
@@ -315,13 +320,13 @@ md-autocomplete input:not(.md-input) {
   padding: 0 10px 10px 10px;
 }
 
-.infobox-loading {
-    width: 100%;
+.infobox-container > * {
+  width: 100%;
 }
 
 .infobox-loading-text {
-    padding: 15px 15px 10px 15px;
-    color: rgb(117, 117, 117);
+  padding: 15px 15px 10px 15px;
+  color: rgb(117, 117, 117);
 }
 
 /* leaflet fixes */

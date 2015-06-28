@@ -46,48 +46,47 @@
     </div>
 
   <md-whiteframe class="infobox-container" layout="column" layout-align="center center"
-                 ng-show="main.map.loadingObjects || main.map.objects.length">
+                 ng-show="main.show.infobox">
     <div class="infobox-loading" layout="column" layout-align="start center"
-         ng-show="main.map.loadingObjects">
+         ng-show="main.show.infoboxLoading">
       <span class="infobox-loading-text">Searching for data...</span>
       <md-progress-linear md-mode="indeterminate"></md-progress-linear>
     </div>
-
-    <md-toolbar ng-if="main.map.objects.length"
-                ng-hide="main.map.loadingObjects">
-      <div class="md-toolbar-tools">
-        <h3>
-          <span>{{main.map.objects.length}} object found</span>
-        </h3>
-        <span flex></span>
-        <md-button class="md-icon-button" aria-label="Refresh">
-          <md-icon class="material-icons" aria-label="Refresh">refresh</md-icon>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="Close"
-                   ng-click="main.hideInfobox()">
-          <md-icon class="material-icons" aria-label="Close">close</md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-    <md-tabs md-border-bottom md-swipe-content md-no-ink
-             md-selected="main.selectedIndex"
-             ng-if="main.map.objects.length"
-             ng-hide="main.map.loadingObjects">
-      <md-tab ng-repeat="object in main.map.objects" label>
-        <md-tab-label>
-          {{object.tags.name|| object.id}}
-        </md-tab-label>
-        <md-tab-body>
-          <pre>{{::object.tags| json}}</pre>
-        </md-tab-body>
-      </md-tab>
-    </md-tabs>
+    <div ng-hide="main.show.infoboxLoading">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h3>
+            <span>{{main.map.objects.length}} object found</span>
+          </h3>
+          <span flex></span>
+          <md-button class="md-icon-button" aria-label="Refresh">
+            <md-icon class="material-icons" aria-label="Refresh">refresh</md-icon>
+          </md-button>
+          <md-button class="md-icon-button" aria-label="Close"
+                     ng-click="main.hideInfobox()">
+            <md-icon class="material-icons" aria-label="Close">close</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-tabs md-border-bottom md-swipe-content md-no-ink
+               md-selected="main.selectedIndex"
+               ng-if="main.map.objects.length">
+        <md-tab ng-repeat="object in main.map.objects" label>
+          <md-tab-label>
+            {{object.tags.name|| object.id}}
+          </md-tab-label>
+          <md-tab-body>
+            <pre>{{::object.tags| json}}</pre>
+          </md-tab-body>
+        </md-tab>
+      </md-tabs>
+    </div>
   </md-whiteframe>
 
   <md-toolbar layout="row">
     <md-button ng-click="main.showMenu()">
-      <md-icon class="material-icons step" aria-label="Menu">menu</md-icon>
-      <span class="toolbar-label">Menu</span>
+      <md-icon class="material-icons step" aria-label="Options">settings</md-icon>
+      <span class="toolbar-label">Options</span>
     </md-button>
     <md-button ng-click="main.showLayerSwitcher($event)">
       <md-icon class="material-icons step" aria-label="Layers">layers</md-icon>
@@ -101,25 +100,20 @@
   </md-toolbar>
 
   <div flex layout="row">
-    <div ng-controller="SidebarController">
+    <div ng-controller="SidebarController as sidebar">
       <md-sidenav class="md-whiteframe-z2" md-component-id="left">
         <md-list>
-          <md-subheader class="md-no-sticky">Example Items</md-subheader>
-          <md-list-item ng-repeat="setting in settings">
-            <md-icon class="material-icons">{{setting.icon}}</md-icon>
-            <p>{{setting.name}}</p>
-            <md-switch class="md-secondary" ng-model="setting.enabled"></md-switch>
-          </md-list-item>
-          <md-list-item>
-            <md-icon md-svg-icon="action:cached"></md-icon>
-            <p>Data Usages</p>
+          <md-subheader class="md-no-sticky">Show this area in</md-subheader>
+          <md-list-item ng-repeat="website in sidebar.websites">
+            <md-icon class="material-icons">link</md-icon>
+            <p><a ng-href="{{sidebar.goToUrl(website)}}" target="_blank">{{website}}</a></p>
           </md-list-item>
         </md-list>
       </md-sidenav>
     </div>
     <md-content flex id="content">
       <md-card>
-        <div ng-leaflet ng-model="main.map" ng-layers="main.layers" ng-action="main.action"></div>
+        <div ng-leaflet ng-model="main.map" ng-layers="main.layers" ng-action="main.action" ng-shown="main.show"></div>
       </md-card>
       <footer>© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a></footer>
     </md-content>

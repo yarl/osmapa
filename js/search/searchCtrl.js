@@ -3,7 +3,7 @@
 (function () {
   'use strict';
   angular
-          .module('osmapa.search', ['ngMaterial'])
+          .module('osmapa.search', ['ngAnimate', 'ngMaterial'])
           .controller('SearchController', SearchController);
 
   function SearchController($scope, searchService) {
