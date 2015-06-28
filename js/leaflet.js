@@ -25,7 +25,9 @@
         for (var i in vm._layers) {
           var layer = vm._layers[i];
           if (layer.shortcut === shortcut) {
-            vm.layers.clearLayers().addLayer(new L.TileLayer(layer.url));
+            vm.layers.clearLayers().addLayer(new L.TileLayer(layer.url), {
+              maxZoom: 19
+            });
             vm._model.layer = layer.shortcut;
             updateHash();
             break;
@@ -129,6 +131,7 @@
 
     function ngLeafletLink(scope, iElement, iAttrs, ctrl) {
       var model = scope.ngModel;
+      var show = scope.ngShown;
       scope.layers = new L.LayerGroup();
       scope.overlays = new L.LayerGroup();
       scope.objects = new L.LayerGroup();
@@ -156,27 +159,26 @@
 
       scope.map.on('click', function (e) {
         if (scope.map.getZoom() > 13) {
-          scope.mapClick(e);
-          ctrl.$modelValue.loadingObjects = true;
-          searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom()).then(function (data) {
-            console.log(data);
-            ctrl.$modelValue.loadingObjects = false;
-            ctrl.$modelValue.objects = data;
-          });
+          loadData(e);
         }
       });
 
       if (L.Browser.touch) {
         scope.map.on('contextmenu', function (e) {
           if (scope.map.getZoom() > 13) {
-            scope.mapClick(e);
-            ctrl.$modelValue.loadingObjects = true;
-            searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom()).then(function (data) {
-              console.log(data);
-              ctrl.$modelValue.loadingObjects = false;
-              ctrl.$modelValue.objects = data;
-            });
+            loadData(e);
           }
+        });
+      }
+
+      function loadData(e) {
+        scope.mapClick(e);
+        show.infobox = true;
+        show.infoboxLoading = true;
+        searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom()).then(function (data) {
+          console.log(data);
+          show.infoboxLoading = false;
+          model.objects = data;
         });
       }
 
@@ -213,7 +215,8 @@
       scope: {
         ngModel: '=',
         ngLayers: '=',
-        ngAction: '='
+        ngAction: '=',
+        ngShown: '='
       },
       controller: ngLeafletController,
       link: ngLeafletLink

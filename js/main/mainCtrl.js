@@ -1,12 +1,12 @@
 (function () {
   'use strict';
   angular
-          .module('osmapa.main', ['ngMaterial'])
+          .module('osmapa.main', ['ngAnimate', 'ngMaterial'])
           .controller('MainController', MainController);
 
-  function MainController($scope, $mdSidenav, $mdBottomSheet) {
+  function MainController($scope, $mdSidenav, $mdBottomSheet, $timeout) {
     var main = this;
-    
+
     main.action = [];
     main.map = {};
     main.layers = [];
@@ -14,11 +14,13 @@
     main.showLayerSwitcher = showLayerSwitcher;
     main.showMenu = showMenu;
     main.hideInfobox = hideInfobox;
-    
+
     ////////////
-    
+
     main.show = {
-      search: false
+      search: true,
+      infobox: false,
+      infoboxLoading: false
     };
 
     main.map = {
@@ -56,24 +58,19 @@
         url: 'http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
         attribution: 'Tiles courtesy of Humanitarian OpenStreetMap Team'
       }];
-    
-    ////////////
-
-    $scope.$watch('main.map.objects', function (_new){
-      if(_new.lenght) {
-        main.selectedIndex = 0;
-      }
-    });
 
     ////////////
 
     function hideInfobox() {
-      main.map.objects = [];
+      main.show.infobox = false;
+      $timeout(function() {
+        main.map.objects = [];
+      }, 500);
     }
 
     function showMenu() {
       $mdSidenav('left').toggle();
-    };
+    }
 
     function showLayerSwitcher($event) {
       $mdBottomSheet.show({
@@ -88,6 +85,7 @@
       }).then(function (selectedLayer) {
         $scope.setLayer(selectedLayer);
       });
-    };
+    }
+    ;
   }
 })();

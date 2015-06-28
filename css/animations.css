@@ -52,3 +52,17 @@
     opacity: 0;
   }
 }
+
+.infobox-container {
+    opacity: 1;
+}
+
+.infobox-container.ng-hide {
+    opacity: 0;
+}
+
+.infobox-container.ng-hide-add,
+.infobox-container.ng-hide-remove {
+    -webkit-transition: 0.5s linear all;
+    transition: 0.5s linear all;
+}
