@@ -77,10 +77,10 @@
                   </a>
                 </p>
               </md-list-item>
-              <md-divider ng-if="main.getObject().wikipedia"></md-divider>
+              <md-divider ng-show="main.getObject().wikipedia"></md-divider>
               <md-subheader class="md-no-sticky"
-                            ng-if="main.getObject().wikipedia">Wikipedia</md-subheader>
-              <md-list-item ng-if="main.getObject().wikipedia">
+                            ng-show="main.getObject().wikipedia">Wikipedia</md-subheader>
+              <md-list-item ng-show="main.getObject().wikipedia">
                 <p ng-bind-html="main.getObject().wikipedia"></p>
               </md-list-item>
             </md-list>
@@ -91,7 +91,11 @@
             <md-icon class="material-icons" aria-label="Code">code</md-icon> code
           </md-tab-label>
           <md-tab-body>
-            <pre>{{main.map.objects[main.map.objectsIndex].tags| json}}</pre>
+            <pre>{{main.getObject().tags| json}}</pre>
+            <section layout="row" layout-sm="column" layout-align="center center">
+              <md-button flex ng-href="http://osm.org/{{main.getObject().type}}/{{main.getObject().id}}" target="_blank">Open in osm.org</md-button>
+              <md-button flex ng-disabled="true">Open in JOSM</md-button>
+            </section>
           </md-tab-body>
         </md-tab>
         <md-tab>
