@@ -25,9 +25,9 @@
         for (var i in vm._layers) {
           var layer = vm._layers[i];
           if (layer.shortcut === shortcut) {
-            vm.layers.clearLayers().addLayer(new L.TileLayer(layer.url), {
+            vm.layers.clearLayers().addLayer(new L.TileLayer(layer.url, {
               maxZoom: 19
-            });
+            }));
             vm._model.layer = layer.shortcut;
             updateHash();
             break;
@@ -142,7 +142,8 @@
         minZoom: 3,
         layers: [scope.layers, scope.overlays, scope.objects],
         zoomControl: false,
-        detectRetina: true
+        detectRetina: true,
+        maxZoom: 19
       }).setView([model.lat, model.lng], model.zoom);
 
       scope.map.attributionControl.setPrefix("");
