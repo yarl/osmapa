@@ -11,6 +11,8 @@
     main.map = {};
     main.layers = [];
     main.show = {};
+    main.changeObjectsIndex = changeObjectsIndex;
+    main.getObject = getObject;
     main.showLayerSwitcher = showLayerSwitcher;
     main.showMenu = showMenu;
     main.hideInfobox = hideInfobox;
@@ -65,6 +67,7 @@
       main.show.infobox = false;
       $timeout(function() {
         main.map.objects = [];
+        main.map.objectsIndex = 0;
       }, 500);
     }
 
@@ -86,6 +89,27 @@
         $scope.setLayer(selectedLayer);
       });
     }
-    ;
+    
+    /* objects */
+    
+    $scope.$watch(function() {
+      return main.map.objects;
+    }, function(newVal, oldVal) {
+      if(newVal.length) {
+        main.map.objectsIndex = 0;
+      }
+    }, true);
+    
+    function changeObjectsIndex(index) {
+      main.map.objectsIndex = index;
+    }
+    
+    function getObject() {
+      if(!main.map.objects.length) {
+        return {};
+      }
+      
+      return main.map.objects[main.map.objectsIndex];
+    }
   }
 })();

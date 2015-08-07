@@ -6,5 +6,11 @@
         $mdThemingProvider.theme('default')
                 .primaryPalette('green')
                 .accentPalette('light-green');
+      })
+      .filter('domain', function() {
+        return function (input) {
+          var matches = input.match(/^https?\:\/\/(?:www\.)?([^\/?#]+)(?:[\/?#]|$)/i);
+          return matches && matches[1];
+        };
       });
 })();

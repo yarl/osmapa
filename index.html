@@ -43,28 +43,67 @@
     <div ng-hide="main.show.infoboxLoading">
       <md-toolbar>
         <div class="md-toolbar-tools">
-          <h3>
-            <span>{{main.map.objects.length}} object found</span>
-          </h3>
+          <h3></h3>
           <span flex></span>
-          <md-button class="md-icon-button" aria-label="Refresh">
-            <md-icon class="material-icons" aria-label="Refresh">refresh</md-icon>
-          </md-button>
           <md-button class="md-icon-button" aria-label="Close"
                      ng-click="main.hideInfobox()">
             <md-icon class="material-icons" aria-label="Close">close</md-icon>
           </md-button>
         </div>
       </md-toolbar>
-      <md-tabs md-border-bottom md-swipe-content md-no-ink
-               md-selected="main.selectedIndex"
-               ng-if="main.map.objects.length">
-        <md-tab ng-repeat="object in main.map.objects" label>
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab>
           <md-tab-label>
-            {{object.tags.name|| object.id}}
+            <md-icon class="material-icons" aria-label="Info">info outline</md-icon> info
           </md-tab-label>
           <md-tab-body>
-            <pre>{{::object.tags| json}}</pre>
+            <div class="tab-header">
+              <h3>{{main.getObject().tags.name || "/no name/"}}</h3>
+              <p class="md-subheader">
+                {{main.getObject().tags['addr:housenumber']}} {{main.getObject().tags['addr:street']}}<br />
+                {{main.getObject().tags['addr:postcode']}} {{main.getObject().tags['addr:city']}}
+              </p> 
+            </div>
+            <md-list>
+              <md-list-item ng-if="main.getObject().tags.phone || main.getObject().tags['contact:phone']">
+                <md-icon class="material-icons" aria-label="Phone">phone</md-icon>
+                <p>{{main.getObject().tags.phone || main.getObject().tags['contact:phone']}}</p>
+              </md-list-item>
+              <md-list-item ng-if="main.getObject().tags.website || main.getObject().tags['contact:website']">
+                <md-icon class="material-icons" aria-label="Phone">launch</md-icon>
+                <p>
+                  <a ng-href="main.getObject().tags.website || main.getObject().tags['contact:website']">
+                    {{main.getObject().tags.website || main.getObject().tags['contact:website'] | domain}}
+                  </a>
+                </p>
+              </md-list-item>
+            </md-list>
+          </md-tab-body>
+        </md-tab>
+        <md-tab>
+          <md-tab-label>
+            <md-icon class="material-icons" aria-label="Code">code</md-icon> code
+          </md-tab-label>
+          <md-tab-body>
+            <pre>{{main.map.objects[main.map.objectsIndex].tags| json}}</pre>
+          </md-tab-body>
+        </md-tab>
+        <md-tab>
+          <md-tab-label>
+            <md-icon class="material-icons" aria-label="Close">list</md-icon> all ({{main.map.objects.length}})
+          </md-tab-label>
+          <md-tab-body>
+            <md-list>
+              <md-list-item class="md-2-line"
+                            ng-repeat="object in main.map.objects"
+                            ng-click="main.changeObjectsIndex($index)">
+                <md-icon class="material-icons" aria-label="Place">place</md-icon>
+                <div class="md-list-item-text">
+                  <h3>{{object.tags.name|| '#' + object.id}}</h3>
+                  <p>{{object.tags.type}}</p>
+                </div>
+              </md-list-item>
+            </md-list>
           </md-tab-body>
         </md-tab>
       </md-tabs>

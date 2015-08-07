@@ -340,12 +340,40 @@ md-autocomplete input:not(.md-input) {
   font-size: 18px;
 }
 
+/* tabs */
+
 .infobox-container md-tabs {
   width: 100%;
 }
 
+.infobox-container md-tab-item {
+  width: 100px;
+  max-width: 100px !important;
+  padding: 12px 12px;
+}
+
+.infobox-container md-tab-item:last-of-type {
+  width: 130px;
+  max-width: 130px !important;
+  margin-left: 54px;
+}
+
+
 .infobox-container md-tab-content {
   padding: 0 10px 10px 10px;
+}
+
+.infobox-container .tab-header {
+  padding: 0 16px;
+}
+
+.infobox-container .tab-header h3 {
+  margin-bottom: 5px;
+}
+
+.infobox-container md-tab-content md-list {
+  max-height: 400px;
+  overflow: auto;
 }
 
 .infobox-container > * {
@@ -436,10 +464,3 @@ footer a {
   100% {opacity: 0; transform: scale(2.5);}
 }
 
-.md-tab {
-  width: 250px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 12px;
-}
