@@ -180,6 +180,7 @@
           console.log(data);
           show.infoboxLoading = false;
           model.objects = data;
+          model.objectsPosition = [e.latlng.lat, e.latlng.lng];
         });
       }
 

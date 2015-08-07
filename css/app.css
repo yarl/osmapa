@@ -12,7 +12,6 @@ html, body {
 }
 
 .md-button {
-  font-size: 1em;
   margin: 0;
 }
 
@@ -358,9 +357,11 @@ md-autocomplete input:not(.md-input) {
   margin-left: 54px;
 }
 
-
 .infobox-container md-tab-content {
   padding: 0 10px 10px 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .infobox-container .tab-header {
@@ -369,11 +370,6 @@ md-autocomplete input:not(.md-input) {
 
 .infobox-container .tab-header h3 {
   margin-bottom: 5px;
-}
-
-.infobox-container md-tab-content md-list {
-  max-height: 400px;
-  overflow: auto;
 }
 
 .infobox-container > * {

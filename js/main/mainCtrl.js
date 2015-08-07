@@ -93,9 +93,9 @@
     /* objects */
 
     $scope.$watch(function () {
-      return main.map.objects;
-    }, function (newVal, oldVal) {
-      if (newVal.length) {
+      return main.map.objectsPosition;
+    }, function () {
+      if (main.map.objects.length) {
         changeObjectsIndex(0);
       }
     }, true);
