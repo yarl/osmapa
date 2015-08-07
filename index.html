@@ -51,7 +51,7 @@
           </md-button>
         </div>
       </md-toolbar>
-      <md-tabs md-dynamic-height md-border-bottom>
+      <md-tabs md-selected="main.map.objectsTab" md-dynamic-height md-border-bottom>
         <md-tab>
           <md-tab-label>
             <md-icon class="material-icons" aria-label="Info">info outline</md-icon> info
@@ -76,6 +76,12 @@
                     {{main.getObject().tags.website || main.getObject().tags['contact:website'] | domain}}
                   </a>
                 </p>
+              </md-list-item>
+              <md-divider ng-if="main.getObject().wikipedia"></md-divider>
+              <md-subheader class="md-no-sticky"
+                            ng-if="main.getObject().wikipedia">Wikipedia</md-subheader>
+              <md-list-item ng-if="main.getObject().wikipedia">
+                <p ng-bind-html="main.getObject().wikipedia"></p>
               </md-list-item>
             </md-list>
           </md-tab-body>
@@ -149,6 +155,7 @@
   <script src="vendor/angular/angular.min.js"></script>
   <script src="vendor/angular/angular-animate.min.js"></script>
   <script src="vendor/angular/angular-aria.min.js"></script>
+  <script src="vendor/angular/angular-sanitize.min.js"></script>
   <script src="//gitcdn.xyz/repo/angular/bower-material/master/angular-material.js"></script>
   <script src="vendor/leaflet/leaflet.js"></script>
 

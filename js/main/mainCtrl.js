@@ -4,7 +4,7 @@
           .module('osmapa.main', ['ngAnimate', 'ngMaterial'])
           .controller('MainController', MainController);
 
-  function MainController($scope, $mdSidenav, $mdBottomSheet, $timeout) {
+  function MainController($scope, $mdSidenav, $mdBottomSheet, $timeout, $http) {
     var main = this;
 
     main.action = [];
@@ -65,7 +65,7 @@
 
     function hideInfobox() {
       main.show.infobox = false;
-      $timeout(function() {
+      $timeout(function () {
         main.map.objects = [];
         main.map.objectsIndex = 0;
       }, 500);
@@ -89,27 +89,66 @@
         $scope.setLayer(selectedLayer);
       });
     }
-    
+
     /* objects */
-    
-    $scope.$watch(function() {
+
+    $scope.$watch(function () {
       return main.map.objects;
-    }, function(newVal, oldVal) {
-      if(newVal.length) {
-        main.map.objectsIndex = 0;
+    }, function (newVal, oldVal) {
+      if (newVal.length) {
+        changeObjectsIndex(0);
       }
     }, true);
-    
+
     function changeObjectsIndex(index) {
       main.map.objectsIndex = index;
+      main.map.objectsTab = 0;
+      getWikiText(getObject());
     }
-    
+
     function getObject() {
-      if(!main.map.objects.length) {
+      if (!main.map.objects.length) {
         return {};
       }
-      
+
       return main.map.objects[main.map.objectsIndex];
+    }
+
+    function getWikiText(item) {
+      if(!item.tags || !item.tags.wikipedia) {
+        return false;
+      }
+      
+      var wikipage = item.tags.wikipedia,
+              prefix = "en", page = wikipage;
+
+      if (/[a-z][a-z]:/i.test(wikipage.substring(0, 3))) {
+        prefix = wikipage.substring(0, 2);
+        page = wikipage.substring(3);
+      }
+
+      $http.jsonp('http://' + prefix + '.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&callback=JSON_CALLBACK&exintro=&titles=' + page).
+              success(function (data) {
+                for (var i in data.query.pages) {
+                  if (i == "-1") {
+                    item.wikipedia = "<strong>Error</strong>: Wikipedia page not found.";
+                    return false;
+                  }
+
+                  var extract = data.query.pages[i].extract;
+
+                  if (extract.length === 0) {
+                    item.wikipedia = "<strong>Error</strong>: Wikipedia page is probably a redirect";
+                    return false;
+                  }
+
+                  item.wikipedia = extract.length > 500 ? extract.substring(0, 500) + "..." : extract;
+                  return true;
+                }
+              }).
+              error(function (data, status, headers, config) {
+                item.wikipedia = "Error occured, see log for details.";
+              });
     }
   }
 })();
