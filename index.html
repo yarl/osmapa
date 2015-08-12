@@ -70,14 +70,14 @@
               </div> 
             </div>
             <md-list>
-              <md-list-item class="md-2-line" ng-if="infobox.getObjectTag('phone') || infobox.getObjectTag('contact:phone')">
+              <md-list-item class="md-2-line" ng-show="infobox.getObjectTag('phone') || infobox.getObjectTag('contact:phone')">
                 <md-icon class="material-icons" aria-label="Phone">phone</md-icon>
                 <div class="md-list-item-text">
                   <h3>{{infobox.getObjectTag('phone') || infobox.getObjectTag('contact:phone')}}</h3>
                   <h4>{{infobox.getObjectTag('fax') || infobox.getObjectTag('contact:fax')}}</h4>
                 </div>
               </md-list-item>
-              <md-list-item ng-if="infobox.getObjectTag('website') || infobox.getObjectTag('contact:website')">
+              <md-list-item ng-show="infobox.getObjectTag('website') || infobox.getObjectTag('contact:website')">
                 <md-icon class="material-icons" aria-label="Phone">link</md-icon>
                 <p>
                   <a ng-href="{{infobox.getObjectTag('website') || infobox.getObjectTag('contact:website')}}" target="_blank">
@@ -85,7 +85,7 @@
                   </a>
                 </p>
               </md-list-item>
-              <md-list-item ng-if="infobox.getObjectTag('opening_hours')">
+              <md-list-item ng-show="infobox.getObjectTag('opening_hours')">
                 <md-icon class="material-icons" aria-label="Phone">access_time</md-icon>
                 <p>{{infobox.getObjectTag('opening_hours')}}</p>
               </md-list-item>
@@ -96,6 +96,17 @@
                 <p ng-bind-html="infobox.getObject().wikipedia"></p>
               </md-list-item>
             </md-list>
+            <md-divider></md-divider>
+            <section layout="row" layout-sm="column" layout-align="center center">
+              <md-button flex ng-click="infobox.setMapCenter()">
+                <md-icon class="material-icons" aria-label="Info">pin_drop</md-icon>
+                center map
+              </md-button>
+              <md-button flex ng-disabled="true">
+                <md-icon class="material-icons" aria-label="Info">navigation</md-icon>
+                navigate
+              </md-button>
+            </section>
           </md-tab-body>
         </md-tab>
         <md-tab>
@@ -119,7 +130,7 @@
             <md-list>
               <md-list-item class="md-2-line"
                             ng-repeat="object in main.map.objects"
-                            ng-click="infobox.changeObjectsIndex($index)">
+                            ng-click="infobox.setObject($index)">
                 <md-icon class="material-icons" aria-label="Place">place</md-icon>
                 <div class="md-list-item-text">
                   <p>{{infobox.getObjectType($index)}}</p>

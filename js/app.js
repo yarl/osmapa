@@ -12,6 +12,10 @@
       })
       .filter('domain', function() {
         return function (input) {
+          if(!input) {
+            return "";
+          }
+          
           var matches = input.match(/^https?\:\/\/(?:www\.)?([^\/?#]+)(?:[\/?#]|$)/i);
           return matches && matches[1];
         };

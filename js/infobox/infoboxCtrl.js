@@ -6,11 +6,12 @@
           .module('osmapa.infobox', ['ngAnimate', 'ngMaterial'])
           .controller('InfoboxController', InfoboxController);
 
-  function InfoboxController($scope, infoboxService) {
+  function InfoboxController($scope, $timeout, infoboxService) {
     var infobox = this;
     var main = $scope.main;
 
-    infobox.changeObjectsIndex = changeObjectsIndex;
+    infobox.setMapCenter = setMapCenter;
+    infobox.setObject = setObject;
     infobox.getObject = getObject;
     infobox.getObjectTag = getObjectTag;
     infobox.getObjectType = getObjectType;
@@ -21,11 +22,29 @@
       return main.map.objectsPosition;
     }, function () {
       if (main.map.objects.length) {
-        changeObjectsIndex(0);
+        setObject(0);
       }
     }, true);
 
-    function changeObjectsIndex(index) {
+    function setMapCenter(number) {
+      var obj = getObject(number);
+      
+      if (obj.lat && obj.lon) {
+        main.map.lat = obj.lat;
+        main.map.lng = obj.lon;
+        main.map.zoom = 18;
+        return;
+      }
+      
+      if(obj.bounds) {
+        main.action = [
+          [obj.bounds.minlat, obj.bounds.minlon],
+          [obj.bounds.maxlat, obj.bounds.maxlon]
+        ];
+      }
+    }
+
+    function setObject(index) {
       main.map.objectsIndex = index;
       main.map.objectsTab = 0;
       getWikiText(getObject());
@@ -84,9 +103,9 @@
 
     function getObjectType(number) {
       var tags = getObject(number).tags;
-      var array = ["amenity", "shop", "highway", "tourism", "historic", "power",
+      var array = ["amenity", "shop", "highway", "railway", "tourism", "historic", "power",
         "building", "boundary", "leisure", "natural", "landuse", "waterway",
-        "barrier", "addr:housenumber", "route"];
+        "place", "barrier", "addr:housenumber", "route"];
       var returned = "?";
 
       var getText = function (tagName) {
@@ -95,13 +114,13 @@
       };
 
       for (var i = 0, max = array.length; i < max; i++) {
-        if(getText(array[i])) {
+        if (getText(array[i])) {
           returned = getText(array[i]);
           break;
         }
       }
 
-      if(returned.indexOf("addr:housenumber") > -1) {
+      if (returned.indexOf("addr:housenumber") > -1) {
         returned = "address";
       }
 

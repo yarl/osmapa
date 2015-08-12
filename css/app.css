@@ -105,6 +105,10 @@ md-sidenav a {
   margin-top: 10px;
 }
 
+.infobox-container md-divider:last-of-type {
+  margin-bottom: 5px;
+}
+
 .layers-container md-list-item button.layers-button {
   text-align: center;
   width: 100%;
@@ -340,7 +344,6 @@ md-autocomplete input:not(.md-input) {
   margin: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
-  padding: 0 0 5px;
 }
 
 .infobox-container md-toolbar {

@@ -56,7 +56,9 @@
           })
         };
 
-        var uninterestingTags = ['source', 'source_ref', 'source:ref', 'history', 'attribution', 'created_by', 'tiger:county', 'tiger:tlid', 'tiger:upload_uuid', 'KSJ2:curve_id', 'KSJ2:lat', 'KSJ2:lon', 'KSJ2:coordinate', 'KSJ2:filename', 'note:ja'];
+        var uninterestingTags = ['source', 'source_ref', 'source:ref', 'history',
+          'attribution', 'created_by', 'tiger:county', 'tiger:tlid', 'tiger:upload_uuid', 
+          'KSJ2:curve_id', 'KSJ2:lat', 'KSJ2:lon', 'KSJ2:coordinate', 'KSJ2:filename', 'note:ja'];
 
         function compareSize(feature1, feature2) {
           if (!feature1.bounds || !feature2.bounds) {

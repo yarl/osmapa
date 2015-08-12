@@ -130,7 +130,7 @@
     }
 
     function ngLeafletLink(scope, iElement, iAttrs, ctrl) {
-      var model = scope.ngModel;
+      var map = scope.ngModel;
       var show = scope.ngShown;
       scope.layers = new L.LayerGroup();
       scope.overlays = new L.LayerGroup();
@@ -144,12 +144,12 @@
         zoomControl: false,
         detectRetina: true,
         maxZoom: 19
-      }).setView([model.lat, model.lng], model.zoom);
+      }).setView([map.lat, map.lng], map.zoom);
 
       scope.map.attributionControl.setPrefix("");
       scope.map.addControl(new L.Control.Zoom({position: 'bottomleft'}));
 
-      scope.changeLayer(model.layer);
+      scope.changeLayer(map.layer);
       scope.updateHash();
 
       /* events */
@@ -179,8 +179,8 @@
         searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom()).then(function (data) {
           console.log(data);
           show.infoboxLoading = false;
-          model.objects = data;
-          model.objectsPosition = [e.latlng.lat, e.latlng.lng];
+          map.objects = data;
+          map.objectsPosition = [e.latlng.lat, e.latlng.lng];
         });
       }
 
@@ -204,8 +204,8 @@
         }
         if (name === "geoloc") {
           scope.geoLocalize();
-          scope.ngAction = "";
         }
+        scope.ngAction = "";
       }, true);
     }
 
