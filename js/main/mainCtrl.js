@@ -1,3 +1,5 @@
+/* global L */
+
 (function () {
   'use strict';
   angular
@@ -10,6 +12,7 @@
     main.action = [];
     main.map = {};
     main.layers = [];
+    main.overlays = [];
     main.show = {};
     main.showLayerSwitcher = showLayerSwitcher;
     main.showMenu = showMenu;
@@ -28,7 +31,8 @@
       zoom: 10,
       layer: 'os',
       overlay: [],
-      objects: []
+      objects: [],
+      shownObjects: new L.FeatureGroup()
     };
 
     main.layers = [{
@@ -56,6 +60,23 @@
         shortcut: 'hu',
         url: 'http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
         attribution: 'Tiles courtesy of Humanitarian OpenStreetMap Team'
+      }, {
+        name: 'OpenTopo',
+        shortcut: 'ot',
+        url: 'http://server.opentopomap.org/{z}/{x}/{y}.png',
+        attribution: 'OpenTopoMap'
+     }];
+   
+     main.overlays = [{
+        name: 'Shading',
+        shortcut: 'sh',
+        url: 'http://tiles{s}.openpistemap.org/landshaded/{z}/{x}/{y}.png',
+        attribution: 'Shading'
+      }, {
+        name: 'Transport',
+        shortcut: 'tr',
+        url: 'http://pt.openmap.lt/{z}/{x}/{y}.png',
+        attribution: 'Transport'
       }];
 
     ////////////
@@ -70,7 +91,8 @@
         controller: 'LayersController',
         locals: {
           layers: main.layers,
-          map: main.map
+          map: main.map,
+          overlays: main.overlays
         },
         targetEvent: $event,
         preserveScope: true

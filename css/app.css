@@ -165,6 +165,10 @@ md-sidenav a {
   background: transparent url(http://a.tile.openstreetmap.fr/hot/15/18294/10787.png) no-repeat -48px -85px;
 }
 
+.layers-button-ot {
+  background: transparent url(http://server.opentopomap.org/15/18294/10787.png) no-repeat -48px -85px;
+}
+
 /* Primary content area */
 
 #content {

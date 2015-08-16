@@ -4,10 +4,13 @@
           .module('osmapa.main')
           .controller('LayersController', LayersController);
   
-  function LayersController($scope, layers, map) {
+  function LayersController($scope, layers, map, overlays) {
 
     $scope.layers = layers;
+    $scope.overlays = overlays;
+    
     $scope.selectLayer = selectLayer;
+    $scope.selectedOverlays = {};
     
     function selectLayer(layer) {
       for (var i in $scope.layers) {
@@ -18,10 +21,10 @@
       }
     };
 
-    $scope.$watch('overlays', function() {
+    $scope.$watch('selectedOverlays', function() {
       var overlays = [];
-      for(var i in $scope.overlays) {
-        if($scope.overlays[i]) {
+      for(var i in $scope.selectedOverlays) {
+        if($scope.selectedOverlays[i]) {
           overlays.push(i);
         }
       }

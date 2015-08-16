@@ -18,7 +18,8 @@
 
   <body ng-app="osmapaApp" layout="column" ng-controller="MainController as main" ng-cloak>
     <div class="search-container" layout-padding layout="row" ng-controller="SearchController as search">
-      <md-autocomplete md-selected-item="search.search"
+      <md-autocomplete md-select-on-match
+                       md-selected-item="search.search"
                        md-search-text="search.searchText"
                        md-selected-item-change="search.selectedItemChange(item)"
                        md-items="item in search.querySearch(search.searchText)"

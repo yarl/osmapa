@@ -13,11 +13,9 @@
     </div>
     <div class="layers-section-overlay">
       <h2 class="md-subheader">Overlays</h2>
-      <md-list>
-        <div layout="column">
-          <md-checkbox aria-label="Shading" ng-model="overlays.shading" ng-disabled="true">Shading</md-checkbox>
-          <md-checkbox aria-label="Transport" ng-model="overlays.transport" ng-disabled="true">Public Transport</md-checkbox>
-          <md-checkbox aria-label="Paths" ng-model="overlays.paths" ng-disabled="true">Paths</md-checkbox>
+      <md-list layout="column">
+        <div ng-repeat="overlay in overlays">
+          <md-checkbox aria-label="Shading" ng-model="selectedOverlays[overlay.shortcut]">{{overlay.name}}</md-checkbox>
         </div>
       </md-list>
     </div>
