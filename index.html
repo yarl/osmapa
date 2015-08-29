@@ -26,11 +26,16 @@
                        md-item-text="item.properties.name"
                        placeholder="Search"
                        ng-model-options="{debounce: 250}">
-        <div class="search-suggestion">
-          <span class="search-suggestion-type" >{{item.properties.osm_key}} \ {{item.properties.osm_value}}</span>
-          <span class="search-suggestion-name" md-highlight-text="searchText" md-highlight-flags="^i">{{search.getName(item)}}</span>
-          <span class="search-suggestion-name search-suggestion-address">{{search.getAddress(item)}}</span>
-        </div>
+        <md-item-template>
+          <div class="search-suggestion">
+            <span class="search-suggestion-type" >{{item.properties.osm_key}} \ {{item.properties.osm_value}}</span>
+            <span class="search-suggestion-name" md-highlight-text="searchText" md-highlight-flags="^i">{{item | getName}}</span>
+            <span class="search-suggestion-name search-suggestion-address">{{item | getAddress}}</span>
+          </div>
+        </md-item-template>
+        <md-not-found>
+          No matches found.
+        </md-not-found>
       </md-autocomplete>
     </div>
 
