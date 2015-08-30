@@ -8,6 +8,8 @@
 
   function searchService($q, $http) {
     return {
+      overpassCanceller: $q.defer(),
+      
       searchNominatim: function (query) {
         var promise = $http({
           url: 'http://nominatim.openstreetmap.org/search?q=' + query + '&format=json&addressdetails=1&polygon=0',
@@ -43,16 +45,22 @@
                 nearby = "(" + nodes + ";" + ways + ");out tags geom(" + bbox + ");" + relations + ";out geom(" + bbox + ");",
                 isin = "is_in(" + coord.lat + "," + coord.lng + ")->.a;way(pivot.a);out tags geom(" + bbox + ");relation(pivot.a);out tags bb;";
 
+        //reset
+        this.stopOverpass();
+        this.overpassCanceller = $q.defer();
+        
         var requests = {
           isin: $http({
             method: "POST",
             url: "//overpass-api.de/api/interpreter",
-            data: "[timeout:5][out:json];" + isin
+            data: "[timeout:5][out:json];" + isin,
+            timeout: this.overpassCanceller.promise
           }),
           nearby: $http({
             method: "POST",
             url: "//overpass-api.de/api/interpreter",
-            data: "[timeout:5][out:json];" + nearby
+            data: "[timeout:5][out:json];" + nearby,
+            timeout: this.overpassCanceller.promise
           })
         };
 
@@ -145,6 +153,9 @@
 
           return response;
         });
+      },
+      stopOverpass: function() {
+        this.overpassCanceller.resolve("cancelled");  
       }
     };
   }
