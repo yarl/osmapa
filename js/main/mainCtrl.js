@@ -31,8 +31,7 @@
       zoom: 10,
       layer: 'os',
       overlay: [],
-      objects: [],
-      shownObjects: new L.FeatureGroup()
+      objects: []
     };
 
     main.layers = [{

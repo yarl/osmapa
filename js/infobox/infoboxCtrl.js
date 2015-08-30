@@ -6,12 +6,13 @@
           .module('osmapa.infobox', ['ngAnimate', 'ngMaterial'])
           .controller('InfoboxController', InfoboxController);
 
-  function InfoboxController($scope, $timeout, infoboxService) {
+  function InfoboxController($scope, $timeout, infoboxService, searchService) {
     var infobox = this;
     var main = $scope.main;
 
     infobox.setMapCenter = setMapCenter;
     infobox.setObject = setObject;
+    infobox.stop = stop;
     infobox.getObject = getObject;
     infobox.getObjectTag = getObjectTag;
     infobox.getObjectType = getObjectType;
@@ -25,6 +26,15 @@
         setObject(0);
       }
     }, true);
+
+    function drawObject(object) {
+      if (object.type === "node") {
+        main.action = new L.CircleMarker([object.lat, object.lon]);
+      }
+      if (object.type === "way") {
+        //
+      }
+    }
 
     function setMapCenter(number) {
       var obj = getObject(number);
@@ -47,6 +57,7 @@
     function setObject(index) {
       main.map.objectsIndex = index;
       main.map.objectsTab = 0;
+      drawObject(main.map.objects[index]);
       getWikiText(getObject());
     }
 
@@ -128,13 +139,17 @@
     }
 
     function hide() {
+      searchService.stopOverpass();
       main.show.infobox = false;
       $timeout(function () {
         main.map.objects = [];
         main.map.objectsIndex = 0;
       }, 500);
     }
-
-
+    
+    function stop() {
+      searchService.stopOverpass();
+      hide();
+    }
   }
 })();

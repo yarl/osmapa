@@ -414,11 +414,6 @@ md-autocomplete input:not(.md-input) {
   width: 100%;
 }
 
-.infobox-loading-text {
-  padding: 15px 15px 10px 15px;
-  color: rgb(117, 117, 117);
-}
-
 /* leaflet fixes */
 
 .leaflet-top, .leaflet-bottom {

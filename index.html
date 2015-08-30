@@ -42,12 +42,6 @@
   <md-whiteframe class="infobox-container" layout="column" layout-align="center center"
                  ng-controller="InfoboxController as infobox"
                  ng-show="main.show.infobox">
-    <div class="infobox-loading" layout="column" layout-align="start center"
-         ng-show="main.show.infoboxLoading">
-      <span class="infobox-loading-text">Searching for data...</span>
-      <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-    </div>
-    <div ng-hide="main.show.infoboxLoading">
       <md-toolbar>
         <div class="md-toolbar-tools">
           <h3></h3>
@@ -58,7 +52,12 @@
           </md-button>
         </div>
       </md-toolbar>
-      <md-tabs md-selected="main.map.objectsTab" md-dynamic-height md-border-bottom>
+      <div layout="column" layout-align="start center"
+           ng-show="main.show.infoboxLoading">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+      <md-tabs md-selected="main.map.objectsTab" md-dynamic-height md-border-bottom
+               ng-hide="main.show.infoboxLoading">
         <md-tab>
           <md-tab-label>
             <md-icon class="material-icons" aria-label="Info">info_outline</md-icon> info
@@ -147,7 +146,6 @@
           </md-tab-body>
         </md-tab>
       </md-tabs>
-    </div>
   </md-whiteframe>
 
   <md-toolbar layout="row">
@@ -180,7 +178,10 @@
     </div>
     <md-content flex id="content">
       <md-card>
-        <div ng-leaflet ng-model="main.map" ng-layers="main.layers" ng-action="main.action" ng-shown="main.show"></div>
+        <div ng-leaflet ng-model="main.map"
+             ng-layers="main.layers"
+             ng-action="main.action"
+             ng-shown="main.show"></div>
       </md-card>
       <footer>© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a></footer>
     </md-content>

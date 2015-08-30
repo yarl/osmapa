@@ -14,7 +14,6 @@
       vm.changeLayer = changeLayer;
       vm.changeOverlay = changeOverlay;
       vm.changePosition = changePosition;
-      vm.drawObject = drawObject;
       vm.geoLocalize = geoLocalize;
       vm.mapClick = mapClick;
       vm.updateHash = updateHash;
@@ -60,15 +59,6 @@
           $timeout(function () {
             vm.map.setView([vm._model.lat, vm._model.lng], vm._model.zoom);
           }, 0);
-        }
-      }
-
-      function drawObject(object) {
-        if (object.type === "node") {
-          L.circleMarker([object.lat, object.lon]).addTo(vm._model.shownObjects);
-        }
-        if (object.type === "way") {
-          console.log('way');
         }
       }
 
@@ -145,7 +135,7 @@
       var show = scope.ngShown;
       scope.layers = new L.LayerGroup();
       scope.overlays = new L.LayerGroup();
-      scope.objects = new L.FeatureGroup();
+      scope.shownObjects = new L.FeatureGroup();
 
       /* map config and init */
 
@@ -157,11 +147,10 @@
         maxZoom: 19
       }).setView([map.lat, map.lng], map.zoom);
 
-      console.log(map.shownObjects);
 
       scope.map.attributionControl.setPrefix("");
       scope.map.addControl(new L.Control.Zoom({position: 'bottomleft'}));
-      scope.map.addLayer(scope.objects);
+      scope.map.addLayer(scope.shownObjects);
       
       scope.changeLayer(map.layer);
       scope.updateHash();
@@ -188,14 +177,12 @@
 
       function loadData(e) {
         scope.mapClick(e);
-        map.shownObjects.clearLayers();
         show.infobox = true;
         show.infoboxLoading = true;
         searchService.overpass(e.latlng, scope.map.getBounds(), scope.map.getZoom()).then(function (data) {
           console.log(data);
           show.infoboxLoading = false;
           map.objects = data;
-          //scope.drawObject(data[0]);
           map.objectsPosition = [e.latlng.lat, e.latlng.lng];
         });
       }
@@ -214,12 +201,18 @@
         scope.changePosition(_new);
       }, true);
 
-      scope.$watch('ngAction', function (name) {
-        if (angular.isArray(name)) {
-          scope.zoomToBoundary(name);
+      scope.$watch('ngAction', function (input) {
+        if (angular.isArray(input)) {
+          scope.zoomToBoundary(input);
         }
-        if (name === "geoloc") {
+        if (input === "geoloc") {
           scope.geoLocalize();
+        }
+        if(angular.isObject(input)) {
+          if (input._latlng) {
+            scope.shownObjects.clearLayers();
+            scope.shownObjects.addLayer(input);
+          }
         }
         scope.ngAction = "";
       }, true);
