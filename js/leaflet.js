@@ -205,12 +205,12 @@
         if (angular.isArray(input)) {
           scope.zoomToBoundary(input);
         }
-        if (input === "geoloc") {
+        else if (input === "geoloc") {
           scope.geoLocalize();
         }
-        if(angular.isObject(input)) {
-          if (input._latlng) {
-            scope.shownObjects.clearLayers();
+        else if(angular.isObject(input)) {
+          scope.shownObjects.clearLayers();
+          if (input._latlng || input._latlngs) {
             scope.shownObjects.addLayer(input);
           }
         }

@@ -31,22 +31,31 @@
       if (object.type === "node") {
         main.action = new L.CircleMarker([object.lat, object.lon]);
       }
-      if (object.type === "way") {
-        //
+      else if (object.type === "way") {
+        var latlngs = object.geometry.map(function (element) {
+          return [element.lat, element.lon];
+        });
+        var isClosed = latlngs[0][0] === latlngs[latlngs.length - 1][0] &&
+                latlngs[0][1] === latlngs[latlngs.length - 1][1];
+
+        main.action = isClosed ? new L.Polygon(latlngs) : new L.Polyline(latlngs);
+      }
+      else if (object.type === "relation") {
+        main.action = {};
       }
     }
 
     function setMapCenter(number) {
       var obj = getObject(number);
-      
+
       if (obj.lat && obj.lon) {
         main.map.lat = obj.lat;
         main.map.lng = obj.lon;
         main.map.zoom = 18;
         return;
       }
-      
-      if(obj.bounds) {
+
+      if (obj.bounds) {
         main.action = [
           [obj.bounds.minlat, obj.bounds.minlon],
           [obj.bounds.maxlat, obj.bounds.maxlon]
@@ -105,7 +114,7 @@
         };
       }
 
-      return main.map.objects[number ? number : main.map.objectsIndex];
+      return main.map.objects[angular.isNumber(number) ? number : main.map.objectsIndex];
     }
 
     function getObjectTag(name, number) {
@@ -146,7 +155,7 @@
         main.map.objectsIndex = 0;
       }, 500);
     }
-    
+
     function stop() {
       searchService.stopOverpass();
       hide();
