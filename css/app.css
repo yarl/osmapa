@@ -25,7 +25,7 @@ html, body {
   width: 36px;
 }
 
-md-toolbar {
+.header {
   padding-right: 10px;
   padding-left: 10px;
   font-size: 1em;
@@ -33,17 +33,17 @@ md-toolbar {
   color: white !important;
 }
 
-md-toolbar > .md-button {
+.header > .md-button {
   padding-right: 8px;
   padding-left: 8px;
   color: white !important;
 }
 
-md-toolbar md-icon {
+.header md-icon {
   color: white !important;
 }
 
-md-toolbar h1 {
+.header h1 {
   margin: auto;
 }
 
@@ -294,6 +294,7 @@ md-autocomplete {
   top: 79px;
   z-index: 5;
   width: 400px;
+  height: auto;
 }
 
 .search-suggestion {
@@ -354,6 +355,7 @@ md-autocomplete input:not(.md-input) {
   margin: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
+  height: auto;
 }
 
 .infobox-container md-toolbar {
