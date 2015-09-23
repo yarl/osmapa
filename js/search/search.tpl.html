@@ -1,0 +1,21 @@
+<div class="search-container" layout-padding layout="row">
+  <md-autocomplete md-select-on-match
+                   md-selected-item="ctrl.search"
+                   md-search-text="ctrl.searchText"
+                   md-selected-item-change="ctrl.selectedItemChange(item)"
+                   md-items="item in ctrl.querySearch(ctrl.searchText)"
+                   md-item-text="item.properties.name"
+                   placeholder="Search"
+                   ng-model-options="{debounce: 250}">
+    <md-item-template>
+      <div class="search-suggestion">
+        <span class="search-suggestion-type" >{{item.properties.osm_key}} \ {{item.properties.osm_value}}</span>
+        <span class="search-suggestion-name" md-highlight-text="searchText" md-highlight-flags="^i">{{item | getName}}</span>
+        <span class="search-suggestion-name search-suggestion-address">{{item | getAddress}}</span>
+      </div>
+    </md-item-template>
+    <md-not-found>
+      No matches found.
+    </md-not-found>
+  </md-autocomplete>
+</div>

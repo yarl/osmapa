@@ -4,25 +4,37 @@
   'use strict';
   angular
           .module('osmapa.search', ['ngAnimate', 'ngMaterial'])
+          .directive('osmapaSearch', function () {
+            return {
+              scope: {
+                mapData: '=',
+                mapAction: '='
+              },
+              templateUrl: 'js/search/search.tpl.html',
+              replace: true,
+              controller: 'SearchController',
+              controllerAs: 'ctrl',
+              bindToController: true
+            };
+          })
           .controller('SearchController', SearchController)
           .filter('getAddress', GetAddressFilter)
           .filter('getName', GetNameFilter);
 
-  function SearchController($scope, searchService) {
-    var search = this;
-    var main = $scope.main;
+  function SearchController(searchService) {
+    var ctrl = this;
     
-    search.querySearch = querySearch;
-    search.search = "";
-    search.selectedItemChange = selectedItemChange;
+    ctrl.querySearch = querySearch;
+    ctrl.search = "";
+    ctrl.selectedItemChange = selectedItemChange;
     
     ////////////
    
     function querySearch(query) {
       var promise;
       promise = searchService.search(query, {
-        lat: main.map.lat,
-        lng: main.map.lng
+        lat: ctrl.mapData.lat,
+        lng: ctrl.mapData.lng
       }).then(function (response) {
         return response;
       });
@@ -33,11 +45,11 @@
       if (item) {
         if (item.properties.extent) {
           var bbox = item.properties.extent;
-          main.action = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
+          ctrl.mapAction = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
         } else {
-          main.map.lat = item.geometry.coordinates[1];
-          main.map.lng = item.geometry.coordinates[0];
-          main.map.zoom = 18;
+          ctrl.mapData.lat = item.geometry.coordinates[1];
+          ctrl.mapData.lng = item.geometry.coordinates[0];
+          ctrl.mapData.zoom = 18;
         }
       }
     };

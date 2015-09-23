@@ -1,0 +1,107 @@
+  <md-whiteframe class="infobox-container" layout="column" layout-align="center center"
+                 ng-show="ctrl.show.infobox">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h3></h3>
+          <span flex></span>
+          <md-button class="md-icon-button" aria-label="Close"
+                     ng-click="ctrl.hide()">
+            <md-icon class="material-icons" aria-label="Close">close</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <div layout="column" layout-align="start center"
+           ng-show="ctrl.show.infoboxLoading">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+      <md-tabs md-selected="ctrl.mapData.objectsTab" md-dynamic-height md-border-bottom
+               ng-hide="ctrl.show.infoboxLoading">
+        <md-tab>
+          <md-tab-label>
+            <md-icon class="material-icons" aria-label="Info">info_outline</md-icon> info
+          </md-tab-label>
+          <md-tab-body>
+            <div class="tab-header">
+              <h3>
+                <p class="md-subheader">{{ctrl.getObjectType()}}</p>
+                {{ctrl.getObjectTag('name:en') || ctrl.getObjectTag('name') || "/no name/"}}
+                <span ng-show="ctrl.getObjectTag('stars')">{{ctrl.getObjectTag('stars') | toStars}}</span>
+              </h3>
+              <div class="md-subheader">
+                <div>{{ctrl.getObjectTag('addr:housenumber')}} {{ctrl.getObjectTag('addr:street')}}</div>
+                <div>{{ctrl.getObjectTag('addr:postcode')}} {{ctrl.getObjectTag('addr:city')}}</div>
+              </div> 
+            </div>
+            <md-list>
+              <md-list-item class="md-2-line" ng-show="ctrl.getObjectTag('phone') || ctrl.getObjectTag('contact:phone')">
+                <md-icon class="material-icons" aria-label="Phone">phone</md-icon>
+                <div class="md-list-item-text">
+                  <h3>{{ctrl.getObjectTag('phone') || ctrl.getObjectTag('contact:phone')}}</h3>
+                  <h4>{{ctrl.getObjectTag('fax') || ctrl.getObjectTag('contact:fax')}}</h4>
+                </div>
+              </md-list-item>
+              <md-list-item ng-show="ctrl.getObjectTag('website') || ctrl.getObjectTag('contact:website')">
+                <md-icon class="material-icons" aria-label="Phone">link</md-icon>
+                <p>
+                  <a ng-href="{{ctrl.getObjectTag('website') || ctrl.getObjectTag('contact:website')}}" target="_blank">
+                    {{ctrl.getObjectTag('website') || ctrl.getObjectTag('contact:website') | domain}}
+                  </a>
+                </p>
+              </md-list-item>
+              <md-list-item ng-show="ctrl.getObjectTag('opening_hours')">
+                <md-icon class="material-icons" aria-label="Phone">access_time</md-icon>
+                <p>{{ctrl.getObjectTag('opening_hours')}}</p>
+              </md-list-item>
+              <md-divider ng-show="ctrl.getObject().wikipedia"></md-divider>
+              <md-subheader class="md-no-sticky"
+                            ng-show="ctrl.getObject().wikipedia">Wikipedia</md-subheader>
+              <md-list-item ng-show="ctrl.getObject().wikipedia">
+                <p ng-bind-html="ctrl.getObject().wikipedia"></p>
+              </md-list-item>
+            </md-list>
+            <md-divider></md-divider>
+            <section layout="row" layout-sm="column" layout-align="center center">
+              <md-button flex ng-click="ctrl.setMapCenter()">
+                <md-icon class="material-icons" aria-label="Info">pin_drop</md-icon>
+                center map
+              </md-button>
+              <md-button flex ng-disabled="true">
+                <md-icon class="material-icons" aria-label="Info">navigation</md-icon>
+                navigate
+              </md-button>
+            </section>
+          </md-tab-body>
+        </md-tab>
+        <md-tab>
+          <md-tab-label>
+            <md-icon class="material-icons" aria-label="Code">code</md-icon> code
+          </md-tab-label>
+          <md-tab-body>
+            <pre>{{ctrl.getObject().tags | json}}</pre>
+            <section layout="row" layout-sm="column" layout-align="center center">
+              <md-button class="md-primary" flex ng-href="http://osm.org/{{ctrl.getObject().type}}/{{ctrl.getObject().id}}" target="_blank">osm.org</md-button>
+              <md-button flex ng-href="http://osm.org/edit?{{ctrl.getObject().type}}={{ctrl.getObject().id}}" target="_blank">Edit in iD</md-button>
+              <md-button flex ng-disabled="true">Edit in JOSM</md-button>
+            </section>
+          </md-tab-body>
+        </md-tab>
+        <md-tab>
+          <md-tab-label>
+            <md-icon class="material-icons" aria-label="Close">list</md-icon> all ({{ctrl.mapData.objects.length}})
+          </md-tab-label>
+          <md-tab-body>
+            <md-list>
+              <md-list-item class="md-2-line"
+                            ng-repeat="object in ctrl.mapData.objects"
+                            ng-click="ctrl.setObject($index)">
+                <md-icon class="material-icons" aria-label="Place">place</md-icon>
+                <div class="md-list-item-text">
+                  <p>{{ctrl.getObjectType($index)}}</p>
+                  <h3>{{object.tags.name|| '#' + object.id}}</h3>
+                </div>
+              </md-list-item>
+            </md-list>
+          </md-tab-body>
+        </md-tab>
+      </md-tabs>
+  </md-whiteframe>
