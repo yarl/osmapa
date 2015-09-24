@@ -42,7 +42,10 @@
       if (item) {
         if (item.properties.extent) {
           var bbox = item.properties.extent;
-          model.action = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
+          model.action = {
+            type: "ZOOM_TO_BOUNDARY",
+            data: [[bbox[1], bbox[0]], [bbox[3], bbox[2]]]
+          };
         } else {
           model.map.lat = item.geometry.coordinates[1];
           model.map.lng = item.geometry.coordinates[0];

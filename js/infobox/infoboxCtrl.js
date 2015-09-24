@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, L */
 
 (function () {
   'use strict';
@@ -28,7 +28,7 @@
     ctrl.getObjectType = getObjectType;
     ctrl.getWikiText = getWikiText;
     ctrl.hide = hide;
-    
+
     ctrl.isShown = function () {
       return model.show.infobox;
     };
@@ -46,7 +46,10 @@
 
     function drawObject(object) {
       if (object.type === "node") {
-        model.action = new L.CircleMarker([object.lat, object.lon]);
+        model.action = {
+          type: "DRAW_OBJECT",
+          data: new L.CircleMarker([object.lat, object.lon])
+        };
       }
       else if (object.type === "way") {
         var latlngs = object.geometry.map(function (element) {
@@ -55,10 +58,16 @@
         var isClosed = latlngs[0][0] === latlngs[latlngs.length - 1][0] &&
                 latlngs[0][1] === latlngs[latlngs.length - 1][1];
 
-        model.action = isClosed ? new L.Polygon(latlngs) : new L.Polyline(latlngs);
+        model.action = {
+          type: "DRAW_OBJECT",
+          data: isClosed ? new L.Polygon(latlngs) : new L.Polyline(latlngs)
+        };
       }
       else if (object.type === "relation") {
-        model.action = {};
+        model.action = {
+          type: "DRAW_OBJECT",
+          data: false
+        };
       }
     }
 
@@ -73,10 +82,13 @@
       }
 
       if (obj.bounds) {
-        model.action = [
-          [obj.bounds.minlat, obj.bounds.minlon],
-          [obj.bounds.maxlat, obj.bounds.maxlon]
-        ];
+        model.action = {
+          type: "ZOOM_TO_BOUNDARY",
+          data: [
+            [obj.bounds.minlat, obj.bounds.minlon],
+            [obj.bounds.maxlat, obj.bounds.maxlon]
+          ]
+        };
       }
     }
 
@@ -171,6 +183,10 @@
     function hide() {
       searchService.stopOverpass();
       model.show.infobox = false;
+      model.action = {
+        type: "DRAW_OBJECT",
+        data: false
+      };
       $timeout(function () {
         model.map.objects = [];
         model.map.objectsIndex = 0;

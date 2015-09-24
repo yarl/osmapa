@@ -89,20 +89,23 @@
 
               scope.$watch(function(){
                 return model.action;
-              }, function (input) {
-                if (angular.isArray(input)) {
-                  ctrl.zoomToBoundary(input);
-                }
-                else if (input === "geoloc") {
+              }, function (value) {
+                
+                if(value.type === "ZOOM_TO_BOUNDARY") {
+                  angular.isArray(value.data) ? 
+                    ctrl.zoomToBoundary(value.data) :
+                    console.log("ZOOM_TO_BOUNDARY: data not an array!");
+                } 
+                else if(value.type === "GEOLOC") {
                   ctrl.geoLocalize();
                 }
-                else if (angular.isObject(input)) {
+                else if(value.type === "DRAW_OBJECT") {
                   ctrl.shownObjects.clearLayers();
-                  if (input._latlng || input._latlngs) {
-                    ctrl.shownObjects.addLayer(input);
+                  if (value.data && (value.data._latlng || value.data._latlngs)) {
+                    ctrl.shownObjects.addLayer(value.data);
                   }
                 }
-                model.action = "";
+                model.action = {};
               }, true);
             }
 

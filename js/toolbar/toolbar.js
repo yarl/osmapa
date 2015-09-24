@@ -18,12 +18,19 @@
 
   function ToolbarController(model, $scope, $mdSidenav, $mdBottomSheet) {
     var ctrl = this;
-    
+
+    ctrl.geolocate = geolocate;
     ctrl.showMenu = showMenu;
     ctrl.showLayerSwitcher = showLayerSwitcher;
-    
+
     ////////////
-   
+
+    function geolocate() {
+      model.action = {
+        type: "GEOLOC"
+      };
+    }
+
     function showMenu() {
       $mdSidenav('left').toggle();
     }
