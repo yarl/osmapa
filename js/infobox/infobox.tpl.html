@@ -1,5 +1,5 @@
   <md-whiteframe class="infobox-container" layout="column" layout-align="center center"
-                 ng-show="ctrl.show.infobox">
+                 ng-show="ctrl.isShown()">
       <md-toolbar>
         <div class="md-toolbar-tools">
           <h3></h3>
@@ -11,11 +11,11 @@
         </div>
       </md-toolbar>
       <div layout="column" layout-align="start center"
-           ng-show="ctrl.show.infoboxLoading">
+           ng-show="ctrl.isLoading()">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
       </div>
-      <md-tabs md-selected="ctrl.mapData.objectsTab" md-dynamic-height md-border-bottom
-               ng-hide="ctrl.show.infoboxLoading">
+      <md-tabs md-selected="ctrl.activeTab" md-dynamic-height md-border-bottom
+               ng-hide="ctrl.isLoading()">
         <md-tab>
           <md-tab-label>
             <md-icon class="material-icons" aria-label="Info">info_outline</md-icon> info
@@ -87,12 +87,12 @@
         </md-tab>
         <md-tab>
           <md-tab-label>
-            <md-icon class="material-icons" aria-label="Close">list</md-icon> all ({{ctrl.mapData.objects.length}})
+            <md-icon class="material-icons" aria-label="Close">list</md-icon> all ({{ctrl.getObjects().length}})
           </md-tab-label>
           <md-tab-body>
             <md-list>
               <md-list-item class="md-2-line"
-                            ng-repeat="object in ctrl.mapData.objects"
+                            ng-repeat="object in ctrl.getObjects()"
                             ng-click="ctrl.setObject($index)">
                 <md-icon class="material-icons" aria-label="Place">place</md-icon>
                 <div class="md-list-item-text">

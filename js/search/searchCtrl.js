@@ -6,10 +6,7 @@
           .module('osmapa.search', ['ngAnimate', 'ngMaterial'])
           .directive('osmapaSearch', function () {
             return {
-              scope: {
-                mapData: '=',
-                mapAction: '='
-              },
+              scope: {},
               templateUrl: 'js/search/search.tpl.html',
               replace: true,
               controller: 'SearchController',
@@ -21,7 +18,7 @@
           .filter('getAddress', GetAddressFilter)
           .filter('getName', GetNameFilter);
 
-  function SearchController(searchService) {
+  function SearchController(model, searchService) {
     var ctrl = this;
     
     ctrl.querySearch = querySearch;
@@ -33,8 +30,8 @@
     function querySearch(query) {
       var promise;
       promise = searchService.search(query, {
-        lat: ctrl.mapData.lat,
-        lng: ctrl.mapData.lng
+        lat: model.map.lat,
+        lng: model.map.lng
       }).then(function (response) {
         return response;
       });
@@ -45,11 +42,11 @@
       if (item) {
         if (item.properties.extent) {
           var bbox = item.properties.extent;
-          ctrl.mapAction = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
+          model.action = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
         } else {
-          ctrl.mapData.lat = item.geometry.coordinates[1];
-          ctrl.mapData.lng = item.geometry.coordinates[0];
-          ctrl.mapData.zoom = 18;
+          model.map.lat = item.geometry.coordinates[1];
+          model.map.lng = item.geometry.coordinates[0];
+          model.map.zoom = 18;
         }
       }
     };

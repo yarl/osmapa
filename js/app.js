@@ -3,8 +3,8 @@
 (function () {
   'use strict';
   angular
-      .module('osmapaApp', ['ngAnimate', 'ngMaterial', 'ngSanitize',
-              'osmapa.main', 'osmapa.map', 'osmapa.search', 'osmapa.sidebar', 'osmapa.infobox'])
+      .module('osmapa', ['ngAnimate', 'ngMaterial', 'ngSanitize',
+              'osmapa.map', 'osmapa.search', 'osmapa.sidebar', 'osmapa.infobox'])
       .config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('default')
                 .primaryPalette('green')

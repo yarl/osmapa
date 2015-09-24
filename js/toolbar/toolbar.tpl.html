@@ -1,0 +1,15 @@
+<md-toolbar class="header" layout="row">
+  <md-button ng-click="ctrl.showMenu()" layout="row" layout-align="center center">
+    <md-icon class="material-icons step" aria-label="Options">settings</md-icon>
+    <span class="toolbar-label">Options</span>
+  </md-button>
+  <md-button ng-click="ctrl.showLayerSwitcher($event)">
+    <md-icon class="material-icons step" aria-label="Layers">layers</md-icon>
+    <span class="toolbar-label">Layers</span>
+  </md-button>
+  <h1>osmapa</h1>
+  <md-button ng-click="ctrl.action = 'geoloc'">
+    <md-icon class="material-icons step" aria-label="Location">my_location</md-icon>
+    <span class="toolbar-label">Location</span>
+  </md-button>
+</md-toolbar>

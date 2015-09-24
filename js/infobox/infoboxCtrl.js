@@ -6,11 +6,7 @@
           .module('osmapa.infobox', ['ngAnimate', 'ngMaterial'])
           .directive('osmapaInfobox', function () {
             return {
-              scope: {
-                mapData: '=',
-                mapAction: '=',
-                show: '='
-              },
+              scope: {},
               templateUrl: 'js/infobox/infobox.tpl.html',
               replace: true,
               controller: 'InfoboxController',
@@ -20,29 +16,37 @@
           })
           .controller('InfoboxController', InfoboxController);
 
-  function InfoboxController($scope, $timeout, infoboxService, searchService) {
+  function InfoboxController(model, $scope, $timeout, infoboxService, searchService) {
     var ctrl = this;
 
     ctrl.setMapCenter = setMapCenter;
     ctrl.setObject = setObject;
     ctrl.stop = stop;
     ctrl.getObject = getObject;
+    ctrl.getObjects = getObjects;
     ctrl.getObjectTag = getObjectTag;
     ctrl.getObjectType = getObjectType;
     ctrl.getWikiText = getWikiText;
     ctrl.hide = hide;
+    
+    ctrl.isShown = function () {
+      return model.show.infobox;
+    };
+    ctrl.isLoading = function () {
+      return model.show.infoboxLoading;
+    };
 
     $scope.$watch(function () {
-      return ctrl.mapData.objectsPosition;
+      return model.map.objectsPosition;
     }, function () {
-      if (ctrl.mapData.objects.length) {
+      if (model.map.objects.length) {
         setObject(0);
       }
     }, true);
 
     function drawObject(object) {
       if (object.type === "node") {
-        ctrl.mapAction = new L.CircleMarker([object.lat, object.lon]);
+        model.action = new L.CircleMarker([object.lat, object.lon]);
       }
       else if (object.type === "way") {
         var latlngs = object.geometry.map(function (element) {
@@ -51,10 +55,10 @@
         var isClosed = latlngs[0][0] === latlngs[latlngs.length - 1][0] &&
                 latlngs[0][1] === latlngs[latlngs.length - 1][1];
 
-        ctrl.mapAction = isClosed ? new L.Polygon(latlngs) : new L.Polyline(latlngs);
+        model.action = isClosed ? new L.Polygon(latlngs) : new L.Polyline(latlngs);
       }
       else if (object.type === "relation") {
-        ctrl.mapAction = {};
+        model.action = {};
       }
     }
 
@@ -62,14 +66,14 @@
       var obj = getObject(number);
 
       if (obj.lat && obj.lon) {
-        ctrl.mapData.lat = obj.lat;
-        ctrl.mapData.lng = obj.lon;
-        ctrl.mapData.zoom = 18;
+        model.map.lat = obj.lat;
+        model.map.lng = obj.lon;
+        model.map.zoom = 18;
         return;
       }
 
       if (obj.bounds) {
-        ctrl.mapAction = [
+        model.action = [
           [obj.bounds.minlat, obj.bounds.minlon],
           [obj.bounds.maxlat, obj.bounds.maxlon]
         ];
@@ -77,9 +81,9 @@
     }
 
     function setObject(index) {
-      ctrl.mapData.objectsIndex = index;
-      ctrl.mapData.objectsTab = 0;
-      drawObject(ctrl.mapData.objects[index]);
+      model.map.objectsIndex = index;
+      ctrl.activeTab = 0;
+      drawObject(model.map.objects[index]);
       getWikiText(getObject());
     }
 
@@ -121,13 +125,17 @@
     }
 
     function getObject(number) {
-      if (!ctrl.mapData || !ctrl.mapData.objects.length) {
+      if (!model.map || !model.map.objects.length) {
         return {
           tags: {}
         };
       }
 
-      return ctrl.mapData.objects[angular.isNumber(number) ? number : ctrl.mapData.objectsIndex];
+      return model.map.objects[angular.isNumber(number) ? number : model.map.objectsIndex];
+    }
+
+    function getObjects() {
+      return model.map.objects;
     }
 
     function getObjectTag(name, number) {
@@ -162,10 +170,10 @@
 
     function hide() {
       searchService.stopOverpass();
-      ctrl.show.infobox = false;
+      model.show.infobox = false;
       $timeout(function () {
-        ctrl.mapData.objects = [];
-        ctrl.mapData.objectsIndex = 0;
+        model.map.objects = [];
+        model.map.objectsIndex = 0;
       }, 500);
     }
 

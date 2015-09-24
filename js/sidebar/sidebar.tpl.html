@@ -1,0 +1,9 @@
+<md-sidenav class="md-whiteframe-z2" md-component-id="left">
+  <md-list>
+    <md-subheader class="md-no-sticky">Show this area in</md-subheader>
+    <md-list-item ng-repeat="website in ctrl.websites">
+      <md-icon class="material-icons">link</md-icon>
+      <p><a ng-href="{{ctrl.goToUrl(website)}}" target="_blank">{{website}}</a></p>
+    </md-list-item>
+  </md-list>
+</md-sidenav>

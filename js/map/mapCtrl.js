@@ -3,14 +3,9 @@
   'use strict';
   angular
           .module('osmapa.map', ['ngAnimate', 'ngMaterial'])
-          .directive('osmapaMap', function (searchService) {
+          .directive('osmapaMap', function (model, searchService) {
             return {
-              scope: {
-                mapData: '=',
-                mapLayers: '=',
-                mapAction: '=',
-                show: '='
-              },
+              scope: {},
               templateUrl: 'js/map/map.tpl.html',
               replace: true,
               controller: 'MapController',
@@ -20,8 +15,9 @@
             };
 
             function MapLink(scope, iElement, iAttrs, ctrl) {
-              var map = ctrl.mapData;
-              var show = ctrl.show;
+              var map = model.map;
+              var show = model.show;
+              
               ctrl.layers = new L.LayerGroup();
               ctrl.overlays = new L.LayerGroup();
               ctrl.shownObjects = new L.FeatureGroup();
@@ -77,7 +73,9 @@
 
               /* watches */
 
-              scope.$watch('ctrl.mapData', function (_new, _old) {
+              scope.$watch(function(){
+                return model.map;
+              }, function (_new, _old) {
                 if (_new.layer !== _old.layer) {
                   ctrl.changeLayer(_new.layer);
                   return;
@@ -89,7 +87,9 @@
                 ctrl.changePosition(_new);
               }, true);
 
-              scope.$watch('ctrl.mapAction', function (input) {
+              scope.$watch(function(){
+                return model.action;
+              }, function (input) {
                 if (angular.isArray(input)) {
                   ctrl.zoomToBoundary(input);
                 }
@@ -102,14 +102,14 @@
                     ctrl.shownObjects.addLayer(input);
                   }
                 }
-                ctrl.mapAction = "";
+                model.action = "";
               }, true);
             }
 
           })
           .controller('MapController', MapController);
 
-  function MapController($scope, $location, $timeout, $rootScope) {
+  function MapController(model, $scope, $location, $timeout, $rootScope) {
     var ctrl = this;
     
     ctrl.changeLayer = changeLayer;
@@ -123,14 +123,14 @@
     /* functions */
 
     function changeLayer(shortcut) {
-      for (var i in ctrl.mapLayers) {
-        var layer = ctrl.mapLayers[i];
+      for (var i in model.layers) {
+        var layer = model.layers[i];
         if (layer.shortcut === shortcut) {
           //@TODO: configurable maxZoom
           ctrl.layers.clearLayers().addLayer(new L.TileLayer(layer.url, {
             maxZoom: 19
           }));
-          ctrl.mapData.layer = layer.shortcut;
+          model.map.layer = layer.shortcut;
           updateHash();
           break;
         }
@@ -142,9 +142,9 @@
     }
 
     function changePosition(position) {
-      var latChange = ctrl.mapData.lat != position.lat;
-      var lngChange = ctrl.mapData.lng != (position.lon || position.lng);
-      var zoomChange = ctrl.mapData.zoom != (position.z || position.zoom);
+      var latChange = model.map.lat != position.lat;
+      var lngChange = model.map.lng != (position.lon || position.lng);
+      var zoomChange = model.map.zoom != (position.z || position.zoom);
 
       if (latChange || lngChange || zoomChange) {
         $timeout(function () {
@@ -152,13 +152,13 @@
         }, 0);
       }
 
-      latChange = ctrl.mapData.lat != ctrl.map.getCenter().lat.toFixed(5);
-      lngChange = ctrl.mapData.lng != ctrl.map.getCenter().lng.toFixed(5);
-      zoomChange = ctrl.mapData.zoom != ctrl.map.getZoom();
+      latChange = model.map.lat != ctrl.map.getCenter().lat.toFixed(5);
+      lngChange = model.map.lng != ctrl.map.getCenter().lng.toFixed(5);
+      zoomChange = model.map.zoom != ctrl.map.getZoom();
 
       if (latChange || lngChange || zoomChange) {
         $timeout(function () {
-          ctrl.map.setView([ctrl.mapData.lat, ctrl.mapData.lng], ctrl.mapData.zoom);
+          ctrl.map.setView([model.map.lat, model.map.lng], model.map.zoom);
         }, 0);
       }
     }
@@ -191,12 +191,12 @@
     function updateHash() {
       $timeout(function () {
         $rootScope.$apply(function () {
-          ctrl.mapData.lat = (ctrl.map.getCenter().lat).toFixed(5);
-          ctrl.mapData.lng = (ctrl.map.getCenter().lng).toFixed(5);
-          ctrl.mapData.zoom = ctrl.map.getZoom();
+          model.map.lat = (ctrl.map.getCenter().lat).toFixed(5);
+          model.map.lng = (ctrl.map.getCenter().lng).toFixed(5);
+          model.map.zoom = ctrl.map.getZoom();
 
-          $location.path('/lat=' + ctrl.mapData.lat + '&lon=' + ctrl.mapData.lng
-                  + '&z=' + ctrl.mapData.zoom + '&m=' + ctrl.mapData.layer);
+          $location.path('/lat=' + model.map.lat + '&lon=' + model.map.lng
+                  + '&z=' + model.map.zoom + '&m=' + model.map.layer);
         });
       }, 0);
     }
@@ -225,7 +225,7 @@
         changePosition(params);
       }
 
-      if (params.m && ctrl.mapData.layer !== params.m) {
+      if (params.m && model.map.layer !== params.m) {
         changeLayer(params.m);
       }
     });

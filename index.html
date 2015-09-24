@@ -16,25 +16,10 @@
     <link rel="stylesheet" href="css/animations.css"/>
   </head>
 
-  <body ng-app="osmapaApp" layout="column" ng-controller="MainController as main" ng-cloak>
-    <osmapa-search map-data="main.map" map-action="main.action"></osmapa-search>
-    <osmapa-infobox map-data="main.map" map-action="main.action" show="main.show"></osmapa-infobox>
-
-  <md-toolbar class="header" layout="row">
-    <md-button ng-click="main.showMenu()" layout="row" layout-align="center center">
-      <md-icon class="material-icons step" aria-label="Options">settings</md-icon>
-      <span class="toolbar-label">Options</span>
-    </md-button>
-    <md-button ng-click="main.showLayerSwitcher($event)">
-      <md-icon class="material-icons step" aria-label="Layers">layers</md-icon>
-      <span class="toolbar-label">Layers</span>
-    </md-button>
-    <h1>osmapa</h1>
-    <md-button ng-click="main.action = 'geoloc'">
-      <md-icon class="material-icons step" aria-label="Location">my_location</md-icon>
-      <span class="toolbar-label">Location</span>
-    </md-button>
-  </md-toolbar>
+  <body ng-app="osmapa" layout="column" ng-cloak>
+    <osmapa-search></osmapa-search>
+    <osmapa-infobox></osmapa-infobox>
+    <osmapa-toolbar></osmapa-toolbar>
 
   <div flex layout="row">
     <div ng-controller="SidebarController as sidebar">
@@ -48,8 +33,7 @@
         </md-list>
       </md-sidenav>
     </div>
-    <osmapa-map map-data="main.map" map-action="main.action"
-                map-layers="main.layers" show="main.show"></osmapa-map>
+    <osmapa-map></osmapa-map>
   </div>
 
   <script src="vendor/angular/angular.min.js"></script>
@@ -60,7 +44,7 @@
   <script src="vendor/leaflet/leaflet.js"></script>
 
   <script src="js/app.js"></script>
-  <script src="js/main/mainCtrl.js"></script>
+  <script src="js/model.js"></script>
   <script src="js/infobox/infoboxCtrl.js"></script>
   <script src="js/layers/layersCtrl.js"></script>
   <script src="js/search/searchCtrl.js"></script>
@@ -69,5 +53,6 @@
   <script src="js/infobox/infoboxService.js"></script>
   <script src="js/search/searchService.js"></script>
   <script src="js/map/mapCtrl.js"></script>
+  <script src="js/toolbar/toolbar.js"></script>
 </body>
 </html>

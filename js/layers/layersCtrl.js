@@ -1,7 +1,9 @@
+/* global angular */
+
 (function () {
   'use strict';
   angular
-          .module('osmapa.main')
+          .module('osmapa')
           .controller('LayersController', LayersController);
   
   function LayersController($scope, layers, map, overlays) {
