@@ -1,68 +1,77 @@
-.search-container.ng-hide-add         { 
-  -webkit-animation:0.5s hiding ease-in-out;
-  animation:0.5s hiding ease-in-out;
-}
-
-.search-container.ng-hide-remove      { 
-  
-  -webkit-animation:0.5s showing ease-in-out;
-  animation:0.5s showing ease-in-out;
-}
-
-@-webkit-keyframes showing {
-  0% {
-    top: -50px;
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes showing {
-  0% {
-    top: -50px;
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-@-webkit-keyframes hiding {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    right: -100px;
-    opacity: 0;
-  }
-}
-
-@keyframes hiding {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    right: -100px;
-    opacity: 0;
-  }
-}
-
-.infobox-container {
+.infobox-container,
+.md-autocomplete-suggestions-container {
     opacity: 1;
 }
 
-.infobox-container.ng-hide {
+.infobox-container.ng-hide,
+.md-autocomplete-suggestions-container.ng-hide {
     opacity: 0;
 }
 
 .infobox-container.ng-hide-add,
-.infobox-container.ng-hide-remove {
-    -webkit-transition: 0.5s linear all;
-    transition: 0.5s linear all;
+.md-autocomplete-suggestions-container.ng-hide-add {
+  -webkit-animation:0.3s fadeOutUp ease-in-out;
+  animation:0.3s fadeOutUp ease-in-out;
+}
+
+
+
+.infobox-container.ng-hide-remove,
+.md-autocomplete-suggestions-container.ng-hide-remove {
+  -webkit-animation:0.3s fadeInDown ease-in-out;
+  animation:0.3s fadeInDown ease-in-out;
+}
+
+/*********************/
+
+@-webkit-keyframes fadeInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -20%, 0);
+    transform: translate3d(0, -20%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -20%, 0);
+    transform: translate3d(0, -20%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@-webkit-keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -20%, 0);
+    transform: translate3d(0, -20%, 0);
+  }
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -20%, 0);
+    transform: translate3d(0, -20%, 0);
+  }
 }

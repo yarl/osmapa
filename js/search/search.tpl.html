@@ -1,12 +1,14 @@
 <div class="search-container" layout-padding layout="row">
   <md-autocomplete md-select-on-match
+                   md-autofocus="true"
+                   md-autoselect="true"
                    md-selected-item="ctrl.search"
                    md-search-text="ctrl.searchText"
                    md-selected-item-change="ctrl.selectedItemChange(item)"
                    md-items="item in ctrl.querySearch(ctrl.searchText)"
                    md-item-text="item.properties.name"
                    placeholder="Search"
-                   ng-model-options="{debounce: 250}">
+                   ng-model-options="{debounce: 500}">
     <md-item-template>
       <div class="search-suggestion">
         <span class="search-suggestion-type" >{{item.properties.osm_key}} \ {{item.properties.osm_value}}</span>
