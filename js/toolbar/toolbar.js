@@ -39,11 +39,7 @@
       $mdBottomSheet.show({
         templateUrl: 'js/layers/layers.tpl.html',
         controller: 'LayersController',
-        locals: {
-          layers: model.layers,
-          map: model.map,
-          overlays: model.overlays
-        },
+        controllerAs: 'ctrl',
         targetEvent: $event,
         preserveScope: true
       }).then(function (selectedLayer) {

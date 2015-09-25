@@ -54,20 +54,22 @@
         shortcut: 'ot',
         url: 'http://server.opentopomap.org/{z}/{x}/{y}.png',
         attribution: 'OpenTopoMap'
-     }];
-   
-     this.overlays = [{
+      }];
+
+    this.overlays = {
+      sh: {
         name: 'Shading',
         shortcut: 'sh',
-        url: 'http://tiles{s}.openpistemap.org/landshaded/{z}/{x}/{y}.png',
-        attribution: 'Shading'
-      }, {
+        url: 'http://tiles2.openpistemap.org/landshaded/{z}/{x}/{y}.png',
+        attribution: 'Shading',
+        zIndex: 2
+      }, tr: {
         name: 'Transport',
         shortcut: 'tr',
         url: 'http://pt.openmap.lt/{z}/{x}/{y}.png',
-        attribution: 'Transport'
-      }];
-    
-    
+        attribution: 'Transport',
+        zIndex: 3
+      }
+    };
   }
 })();

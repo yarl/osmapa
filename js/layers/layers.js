@@ -5,32 +5,40 @@
   angular
           .module('osmapa')
           .controller('LayersController', LayersController);
-  
-  function LayersController($scope, layers, map, overlays) {
 
-    $scope.layers = layers;
-    $scope.overlays = overlays;
+  function LayersController($scope, model) {
+    var ctrl = this;
+
+    ctrl.layers = model.layers;
+    ctrl.overlays = model.overlays;
     
-    $scope.selectLayer = selectLayer;
-    $scope.selectedOverlays = {};
-    
+    ctrl.selectedOverlays = {};
+    model.map.overlay.forEach(function(element) {
+      ctrl.selectedOverlays[element] = true;
+    });
+
+    ctrl.selectLayer = selectLayer;
+    ctrl.selectOverlay = selectOverlay;
+
+    ////////////
+
     function selectLayer(layer) {
-      for (var i in $scope.layers) {
-        if (layer.name === $scope.layers[i].name) {
-          map.layer = $scope.layers[i].shortcut;
+      for (var i in model.layers) {
+        if (layer.name === model.layers[i].name) {
+          model.map.layer = model.layers[i].shortcut;
           return true;
         }
       }
-    };
+    }
 
-    $scope.$watch('selectedOverlays', function() {
+    function selectOverlay() {
       var overlays = [];
-      for(var i in $scope.selectedOverlays) {
-        if($scope.selectedOverlays[i]) {
+      for (var i in ctrl.selectedOverlays) {
+        if (ctrl.selectedOverlays[i]) {
           overlays.push(i);
         }
       }
-      map.overlay = overlays;
-    }, true);
+      model.map.overlay = overlays;
+    }
   }
 })();

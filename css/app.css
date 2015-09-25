@@ -117,6 +117,13 @@ md-sidenav a {
 
 /* Layer switcher */
 
+.layers-container .md-subheader {
+    font-size: 16px;
+    line-height: 16px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
 .layers-container md-list-item button.layers-button {
   text-align: center;
   width: 100%;

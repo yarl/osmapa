@@ -1,10 +1,10 @@
 <md-bottom-sheet class="md-grid layers-container">
-  <div layout="row" layout-align="space-between center">
+  <div layout="row" layout-align="space-between start">
     <div class="layers-section-layer">
       <h2 class="md-subheader">Layers</h2>
       <md-list>
-        <md-list-item ng-repeat="layer in layers">
-          <md-button class="md-grid-item-content layers-button" ng-click="selectLayer(layer)">
+        <md-list-item ng-repeat="layer in ctrl.layers">
+          <md-button class="md-grid-item-content layers-button" ng-click="ctrl.selectLayer(layer)">
             <div class="layers-button-background layers-button-{{layer.shortcut}}"></div>
             <div class="md-grid-text"> {{layer.name}} </div>
           </md-button>
@@ -14,8 +14,12 @@
     <div class="layers-section-overlay">
       <h2 class="md-subheader">Overlays</h2>
       <md-list layout="column">
-        <div ng-repeat="overlay in overlays">
-          <md-checkbox aria-label="Shading" ng-model="selectedOverlays[overlay.shortcut]">{{overlay.name}}</md-checkbox>
+        <div ng-repeat="overlay in ctrl.overlays">
+          <md-checkbox aria-label="Shading"
+                       ng-model="ctrl.selectedOverlays[overlay.shortcut]"
+                       ng-change="ctrl.selectOverlay()">
+            {{overlay.name}}
+          </md-checkbox>
         </div>
       </md-list>
     </div>

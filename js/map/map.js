@@ -17,7 +17,7 @@
             function MapLink(scope, iElement, iAttrs, ctrl) {
               var map = model.map;
               var show = model.show;
-              
+
               ctrl.layers = new L.LayerGroup();
               ctrl.overlays = new L.LayerGroup();
               ctrl.shownObjects = new L.FeatureGroup();
@@ -26,7 +26,7 @@
 
               ctrl.map = L.map('map', {
                 minZoom: 3,
-                layers: [ctrl.layers, ctrl.overlays],
+                layers: [ctrl.overlays, ctrl.layers],
                 zoomControl: false,
                 detectRetina: true,
                 maxZoom: 19
@@ -73,33 +73,33 @@
 
               /* watches */
 
-              scope.$watch(function(){
+              scope.$watch(function () {
                 return model.map;
-              }, function (_new, _old) {
-                if (_new.layer !== _old.layer) {
-                  ctrl.changeLayer(_new.layer);
+              }, function (newVal, oldVal) {
+                if (newVal.layer !== oldVal.layer) {
+                  ctrl.changeLayer(newVal.layer);
                   return;
                 }
-                if (_new.overlay.length !== _old.overlay.length) {
-                  ctrl.changeOverlay(_new.overlay);
+                if (newVal.overlay.length !== oldVal.overlay.length) {
+                  ctrl.changeOverlay(newVal.overlay);
                   return;
                 }
-                ctrl.changePosition(_new);
+                ctrl.changePosition(newVal);
               }, true);
 
-              scope.$watch(function(){
+              scope.$watch(function () {
                 return model.action;
               }, function (value) {
-                
-                if(value.type === "ZOOM_TO_BOUNDARY") {
-                  angular.isArray(value.data) ? 
-                    ctrl.zoomToBoundary(value.data) :
-                    console.log("ZOOM_TO_BOUNDARY: data not an array!");
-                } 
-                else if(value.type === "GEOLOC") {
+
+                if (value.type === "ZOOM_TO_BOUNDARY") {
+                  angular.isArray(value.data) ?
+                          ctrl.zoomToBoundary(value.data) :
+                          console.log("ZOOM_TO_BOUNDARY: data not an array!");
+                }
+                else if (value.type === "GEOLOC") {
                   ctrl.geoLocalize();
                 }
-                else if(value.type === "DRAW_OBJECT") {
+                else if (value.type === "DRAW_OBJECT") {
                   ctrl.shownObjects.clearLayers();
                   if (value.data && (value.data._latlng || value.data._latlngs)) {
                     ctrl.shownObjects.addLayer(value.data);
@@ -114,7 +114,7 @@
 
   function MapController(model, $scope, $location, $timeout, $rootScope) {
     var ctrl = this;
-    
+
     ctrl.changeLayer = changeLayer;
     ctrl.changeOverlay = changeOverlay;
     ctrl.changePosition = changePosition;
@@ -140,8 +140,21 @@
       }
     }
 
-    function changeOverlay(shortcuts) {
-      console.log(shortcuts.join('/'));
+    function changeOverlay(overlays) {
+      ctrl.overlays.clearLayers();
+
+      for (var i in overlays) {
+        var layer = model.overlays[overlays[i]];
+        if (!layer) {
+          continue;
+        }
+        ctrl.overlays.addLayer(new L.TileLayer(layer.url, {
+          maxZoom: 19,
+          zIndex: layer.zIndex
+        }));
+      }
+      model.map.overlay = overlays;
+      updateHash();
     }
 
     function changePosition(position) {
@@ -191,6 +204,7 @@
       }, 50);
     }
 
+    var prevHash = "";
     function updateHash() {
       $timeout(function () {
         $rootScope.$apply(function () {
@@ -198,8 +212,14 @@
           model.map.lng = (ctrl.map.getCenter().lng).toFixed(5);
           model.map.zoom = ctrl.map.getZoom();
 
-          $location.path('/lat=' + model.map.lat + '&lon=' + model.map.lng
-                  + '&z=' + model.map.zoom + '&m=' + model.map.layer);
+          var hash = '/lat=' + model.map.lat + '&lon=' + model.map.lng;
+          hash += '&z=' + model.map.zoom + '&m=' + model.map.layer;
+          hash += model.map.overlay.length ? '&o=' + model.map.overlay.join('/') : '';
+
+          if (hash !== prevHash) {
+            prevHash = hash;
+            $location.path(hash);
+          }
         });
       }, 0);
     }
@@ -230,6 +250,10 @@
 
       if (params.m && model.map.layer !== params.m) {
         changeLayer(params.m);
+      }
+
+      if (params.o && model.map.overlay.join('/') !== params.o) {
+        changeOverlay(params.o.split('/'));
       }
     });
   }
