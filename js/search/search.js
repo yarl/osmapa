@@ -20,13 +20,13 @@
 
   function SearchController(model, searchService) {
     var ctrl = this;
-    
+
     ctrl.querySearch = querySearch;
     ctrl.search = "";
     ctrl.selectedItemChange = selectedItemChange;
-    
+
     ////////////
-   
+
     function querySearch(query) {
       var promise;
       promise = searchService.search(query, {
@@ -36,8 +36,8 @@
         return response;
       });
       return promise;
-    };
-    
+    }
+
     function selectedItemChange(item) {
       if (item) {
         if (item.properties.extent) {
@@ -51,10 +51,24 @@
           model.map.lng = item.geometry.coordinates[0];
           model.map.zoom = 18;
         }
+
+        ctrl.searchText = "";
+        
+        model.show.infobox = true;
+        model.show.infoboxLoading = false;
+        model.map.objects = [{
+            id: item.properties.osm_id,
+            lat: item.geometry.coordinates[1],
+            lon: item.geometry.coordinates[0],
+            tags: {
+              name: item.properties.name
+            },
+            type: item.properties.osm_type
+        }];
       }
-    };
+    }
   }
-  
+
   function GetAddressFilter() {
     return function (item) {
       var prop = item.properties;
@@ -77,7 +91,7 @@
       return result.join(", ");
     };
   }
-  
+
   function GetNameFilter() {
     return function (item) {
       var prop = item.properties;

@@ -1,12 +1,11 @@
 <div class="search-container" layout-padding layout="row">
-  <md-autocomplete md-select-on-match
-                   md-autofocus="true"
-                   md-autoselect="true"
+  <md-autocomplete md-autofocus="true"
                    md-selected-item="ctrl.search"
                    md-search-text="ctrl.searchText"
                    md-selected-item-change="ctrl.selectedItemChange(item)"
                    md-items="item in ctrl.querySearch(ctrl.searchText)"
                    md-item-text="item.properties.name"
+                   md-no-cache="false"
                    placeholder="Search"
                    ng-model-options="{debounce: 500}">
     <md-item-template>
