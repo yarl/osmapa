@@ -3,10 +3,9 @@
 (function () {
   'use strict';
   angular
-          .module('osmapa.sidebar', ['ngAnimate', 'ngMaterial'])
+          .module('osmapa')
           .directive('osmapaSidebar', function () {
             return {
-              scope: {},
               templateUrl: 'js/sidebar/sidebar.tpl.html',
               replace: true,
               controller: 'SidebarController',

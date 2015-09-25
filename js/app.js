@@ -4,7 +4,7 @@
   'use strict';
   angular
       .module('osmapa', ['ngAnimate', 'ngMaterial', 'ngSanitize',
-              'osmapa.map', 'osmapa.search', 'osmapa.sidebar', 'osmapa.infobox'])
+              'osmapa.map', 'osmapa.search', 'osmapa.infobox'])
       .config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('default')
                 .primaryPalette('green')

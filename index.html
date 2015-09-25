@@ -22,17 +22,7 @@
     <osmapa-toolbar></osmapa-toolbar>
 
   <div flex layout="row">
-    <div ng-controller="SidebarController as sidebar">
-      <md-sidenav class="md-whiteframe-z2" md-component-id="left">
-        <md-list>
-          <md-subheader class="md-no-sticky">Show this area in</md-subheader>
-          <md-list-item ng-repeat="website in sidebar.websites">
-            <md-icon class="material-icons">link</md-icon>
-            <p><a ng-href="{{sidebar.goToUrl(website)}}" target="_blank">{{website}}</a></p>
-          </md-list-item>
-        </md-list>
-      </md-sidenav>
-    </div>
+    <osmapa-sidebar></osmapa-sidebar>
     <osmapa-map></osmapa-map>
   </div>
 
@@ -45,14 +35,14 @@
 
   <script src="js/app.js"></script>
   <script src="js/model.js"></script>
-  <script src="js/infobox/infoboxCtrl.js"></script>
-  <script src="js/layers/layersCtrl.js"></script>
-  <script src="js/search/searchCtrl.js"></script>
-  <script src="js/sidebar/sidebarCtrl.js"></script>
-
+  <script src="js/infobox/infobox.js"></script>
+  <script src="js/layers/layers.js"></script>
+   <script src="js/map/map.js"></script>
+  <script src="js/search/search.js"></script>
+  <script src="js/sidebar/sidebar.js"></script>
+  <script src="js/toolbar/toolbar.js"></script>
+  
   <script src="js/infobox/infoboxService.js"></script>
   <script src="js/search/searchService.js"></script>
-  <script src="js/map/mapCtrl.js"></script>
-  <script src="js/toolbar/toolbar.js"></script>
 </body>
 </html>
