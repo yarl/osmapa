@@ -153,8 +153,14 @@
 
         // add results
         results.nearby.forEach(function (element) {
-          response.push(element);
-          unique.push(element.id);
+            if (element.tags.boundary === "administrative" ||
+                    element.tags.region_category === "physiographic" ||
+                    element.tags.type === "land_area" ||
+                    element.tags.type === "route") {
+            } else {
+              response.push(element);
+              unique.push(element.id);
+            }
         });
 
         results.isin = results.isin.sort(compareSize);

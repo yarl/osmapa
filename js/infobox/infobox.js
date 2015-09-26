@@ -145,7 +145,7 @@
     function getObjectType(number) {
       var tags = getObject(number).tags;
       var array = ["amenity", "shop", "highway", "railway", "tourism", "historic", "power",
-        "building", "boundary", "leisure", "natural", "landuse", "waterway",
+        "man_made", "building", "boundary", "leisure", "natural", "landuse", "waterway",
         "place", "barrier", "addr:housenumber", "route"];
       var returned = "?";
 
