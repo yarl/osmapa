@@ -16,11 +16,12 @@
           })
           .controller('InfoboxController', InfoboxController);
 
-  function InfoboxController(model, $scope, infoboxService, searchService, mapService) {
+  function InfoboxController(model, $scope, $window, infoboxService, searchService, mapService) {
     var ctrl = this;
 
     ctrl.setMapCenter = setMapCenter;
     ctrl.setObject = setObject;
+    ctrl.showMapillary = showMapillary;
     ctrl.stop = stop;
     ctrl.getObject = getObject;
     ctrl.getObjects = getObjects;
@@ -34,6 +35,11 @@
     };
     ctrl.isLoading = function () {
       return model.show.infoboxLoading;
+    };
+    ctrl.isMapillary = function () {
+      return model.show.mapillary ?
+              "https://d1cuyjsrcm0gby.cloudfront.net/" + model.show.mapillary + "/thumb-320.jpg" :
+              false;
     };
 
     $scope.$watch(function () {
@@ -160,6 +166,13 @@
       }
 
       return returned;
+    }
+
+    function showMapillary() {
+      if (model.show.mapillary) {
+        $window.open("http://www.mapillary.com/map/im/" + model.show.mapillary + "/photo",
+                model.show.mapillary);
+      }
     }
 
     function hide() {

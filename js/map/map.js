@@ -217,6 +217,7 @@
 
     function loadData(e) {
       mapClick(e);
+      infoboxService.getMapillary({lat: e.latlng.lat, lng: e.latlng.lng});
       infoboxService.show();
       infoboxService.setLoadingState(true);
       ctrl.shownObjects.clearLayers();

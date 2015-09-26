@@ -435,15 +435,24 @@ md-autocomplete input:not(.md-input) {
   position: relative;
 }
 
+.infobox-container .tab-header.tab-header-wide {
+  min-height: 230px;
+  cursor: pointer;
+}
+
 .infobox-container .tab-header:after {
-  background-color: #4CAF50;
-  opacity: .7;
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  background-color: #4CAF50;
+  background-image: -webkit-linear-gradient(135deg,#43A047,#B9F6CA);
+  background-image: -moz-linear-gradient(135deg,#43A047,#B9F6CA);
+  background-image: -o-linear-gradient(135deg,#43A047,#B9F6CA);
+  background-image: linear-gradient(135deg,#43A047,#B9F6CA);
+  opacity: 0.6;
 }
 
 .infobox-container .tab-header > * {
@@ -453,7 +462,8 @@ md-autocomplete input:not(.md-input) {
 
 .infobox-container .tab-header h3 {
   color: #fff;
-  margin: 0 0 10px 0;
+  font-size: 23px;
+  margin: 0;
 }
 
 .infobox-container .tab-header .md-subheader {
@@ -463,8 +473,8 @@ md-autocomplete input:not(.md-input) {
 }
 
 .infobox-container .tab-features {
-  padding-bottom: 15px;
-  background-color: #4CAF50;
+  padding-top: 10px;
+  width: 100%;
 }
 
 .infobox-container .tab-features .dimmed {

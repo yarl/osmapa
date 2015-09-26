@@ -15,35 +15,41 @@
             <md-icon class="material-icons" aria-label="Info">info_outline</md-icon> info
           </md-tab-label>
           <md-tab-body>
-            <div class="tab-header" style="background-image: url('https://d1cuyjsrcm0gby.cloudfront.net/xNB2iJUbhKVv1OlYjBzPoA/thumb-320.jpg');">
-              <h3>
-                <p class="md-subheader">{{ctrl.getObjectType()}}</p>
-                {{ctrl.getObjectTag('name:en') || ctrl.getObjectTag('name') || "/no name/"}}
-                <span ng-show="ctrl.getObjectTag('stars')">{{ctrl.getObjectTag('stars') | toStars}}</span>
-              </h3>
-              <div class="md-subheader">
-                <div>{{ctrl.getObjectTag('addr:housenumber')}} {{ctrl.getObjectTag('addr:street')}}</div>
-                <div>{{ctrl.getObjectTag('addr:postcode')}} {{ctrl.getObjectTag('addr:city')}}</div>
-              </div> 
-            </div>
-            <div class="tab-features" layout="row" layout-align="space-between center"
-                 ng-if="ctrl.getObjectTag('internet_access') || ctrl.getObjectTag('smoking') || ctrl.getObjectTag('wheelchair') || ctrl.getObjectTag('payment:credit_cards')">
-              <md-icon class="material-icons" aria-label="Wifi"
-                       ng-class="{'dimmed': !ctrl.getObjectTag('internet_access'),
-                                  'active': ctrl.getObjectTag('internet_access') === 'wlan'}">wifi</md-icon>
-              <md-icon md-svg-src="img/ico/smoking.svg" class="s24" aria-label="Smoking"
-                       ng-hide="ctrl.getObjectTag('smoking') === 'no'"
-                       ng-class="{'dimmed': !ctrl.getObjectTag('smoking'),
-                                  'active': ctrl.getObjectTag('smoking') === 'yes'}"></md-icon>
-              <md-icon md-svg-src="img/ico/smoking-off.svg" class="s24" aria-label="Smoking"
-                       ng-show="ctrl.getObjectTag('smoking') === 'no'"></md-icon>
-              <md-icon md-svg-src="img/ico/wheelchair.svg" class="s24" aria-label="Wheelchair"
-                       ng-class="{'dimmed': !ctrl.getObjectTag('wheelchair'),
-                                  'active': ctrl.getObjectTag('wheelchair') === 'yes',
-                                  'active--red': ctrl.getObjectTag('wheelchair') === 'no'}"></md-icon>
-              <md-icon class="material-icons" aria-label="Credit card"
-                       ng-class="{'dimmed': !ctrl.getObjectTag('payment:credit_cards'),
-                                  'active': ctrl.getObjectTag('payment:credit_cards') === 'yes'}">credit_card</md-icon>
+            <div class="tab-header"
+                 ng-class="{'tab-header-wide' : ctrl.isMapillary()}"
+                 style="background-image: url('{{ctrl.isMapillary()}}');"
+                 ng-click="ctrl.showMapillary()"
+                 layout="column" layout-align="space-between start">
+              <div>
+                <h3>
+                  <p class="md-subheader">{{ctrl.getObjectType()}}</p>
+                  {{ctrl.getObjectTag('name:en') || ctrl.getObjectTag('name') || "/no name/"}}
+                  <span ng-show="ctrl.getObjectTag('stars')">{{ctrl.getObjectTag('stars') | toStars}}</span>
+                </h3>
+                <div class="md-subheader">
+                  <div>{{ctrl.getObjectTag('addr:housenumber')}} {{ctrl.getObjectTag('addr:street')}}</div>
+                  <div>{{ctrl.getObjectTag('addr:postcode')}} {{ctrl.getObjectTag('addr:city')}}</div>
+                </div> 
+              </div>
+              <div class="tab-features" layout="row" layout-align="space-between center"
+                   ng-if="ctrl.getObjectTag('internet_access') || ctrl.getObjectTag('smoking') || ctrl.getObjectTag('wheelchair') || ctrl.getObjectTag('payment:credit_cards')">
+                <md-icon class="material-icons" aria-label="Wifi"
+                         ng-class="{'dimmed': !ctrl.getObjectTag('internet_access'),
+                                    'active': ctrl.getObjectTag('internet_access') === 'wlan'}">wifi</md-icon>
+                <md-icon md-svg-src="img/ico/smoking.svg" class="s24" aria-label="Smoking"
+                         ng-hide="ctrl.getObjectTag('smoking') === 'no'"
+                         ng-class="{'dimmed': !ctrl.getObjectTag('smoking'),
+                                    'active': ctrl.getObjectTag('smoking') === 'yes'}"></md-icon>
+                <md-icon md-svg-src="img/ico/smoking-off.svg" class="s24" aria-label="Smoking"
+                         ng-show="ctrl.getObjectTag('smoking') === 'no'"></md-icon>
+                <md-icon md-svg-src="img/ico/wheelchair.svg" class="s24" aria-label="Wheelchair"
+                         ng-class="{'dimmed': !ctrl.getObjectTag('wheelchair'),
+                                    'active': ctrl.getObjectTag('wheelchair') === 'yes',
+                                    'active--red': ctrl.getObjectTag('wheelchair') === 'no'}"></md-icon>
+                <md-icon class="material-icons" aria-label="Credit card"
+                         ng-class="{'dimmed': !ctrl.getObjectTag('payment:credit_cards'),
+                                    'active': ctrl.getObjectTag('payment:credit_cards') === 'yes'}">credit_card</md-icon>
+              </div>
             </div>
             <md-list>
               <md-list-item class="md-2-line" ng-show="ctrl.getObjectTag('phone') || ctrl.getObjectTag('contact:phone')">
