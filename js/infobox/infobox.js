@@ -3,7 +3,7 @@
 (function () {
   'use strict';
   angular
-          .module('osmapa.infobox', ['ngAnimate', 'ngMaterial'])
+          .module('osmapa.infobox', ['ngAnimate', 'ngMaterial', 'osmapa.map'])
           .directive('osmapaInfobox', function () {
             return {
               scope: {},
@@ -16,7 +16,7 @@
           })
           .controller('InfoboxController', InfoboxController);
 
-  function InfoboxController(model, $scope, $timeout, infoboxService, searchService) {
+  function InfoboxController(model, $scope, infoboxService, searchService, mapService) {
     var ctrl = this;
 
     ctrl.setMapCenter = setMapCenter;
@@ -46,28 +46,16 @@
 
     function drawObject(object) {
       if (object.type === "node") {
-        model.action = {
-          type: "DRAW_OBJECT",
-          data: new L.CircleMarker([object.lat, object.lon])
-        };
+        mapService.drawNode([object.lat, object.lon]);
       }
       else if (object.type === "way") {
-        var latlngs = object.geometry.map(function (element) {
-          return element ? [element.lat, element.lon] : [];
-        });
-        var isClosed = latlngs[0][0] === latlngs[latlngs.length - 1][0] &&
-                latlngs[0][1] === latlngs[latlngs.length - 1][1];
-
-        model.action = {
-          type: "DRAW_OBJECT",
-          data: isClosed ? new L.Polygon(latlngs) : new L.Polyline(latlngs)
-        };
+        mapService.drawWay(object.geometry);
       }
       else if (object.type === "relation") {
-        model.action = {
-          type: "DRAW_OBJECT",
-          data: false
-        };
+        mapService.clean();
+        infoboxService.getElementGeometry(object.type, object.id).then(function (data) {
+          mapService.drawRelation(data.members);
+        });
       }
     }
 
@@ -82,13 +70,7 @@
       }
 
       if (obj.bounds) {
-        model.action = {
-          type: "ZOOM_TO_BOUNDARY",
-          data: [
-            [obj.bounds.minlat, obj.bounds.minlon],
-            [obj.bounds.maxlat, obj.bounds.maxlon]
-          ]
-        };
+        mapService.zoomToBoundary(obj.bounds);
       }
     }
 
@@ -181,16 +163,7 @@
     }
 
     function hide() {
-      searchService.stopOverpass();
-      model.show.infobox = false;
-      model.action = {
-        type: "DRAW_OBJECT",
-        data: false
-      };
-      $timeout(function () {
-        model.map.objects = [];
-        model.map.objectsIndex = 0;
-      }, 500);
+      infoboxService.hide();
     }
 
     function stop() {

@@ -16,7 +16,7 @@
           })
           .controller('ToolbarController', ToolbarController);
 
-  function ToolbarController(model, $scope, $mdSidenav, $mdBottomSheet) {
+  function ToolbarController(model, $scope, $mdSidenav, $mdBottomSheet, mapService) {
     var ctrl = this;
 
     ctrl.geolocate = geolocate;
@@ -26,9 +26,7 @@
     ////////////
 
     function geolocate() {
-      model.action = {
-        type: "GEOLOC"
-      };
+      mapService.geolocate();
     }
 
     function showMenu() {

@@ -7,15 +7,15 @@
           .service('model', mapService);
 
   function mapService() {
-    this.action = [];
+    var model = this;
 
-    this.show = {
+    model.show = {
       search: true,
       infobox: false,
       infoboxLoading: false
     };
 
-    this.map = {
+    model.map = {
       lat: 50.8545,
       lng: 19.2439,
       zoom: 10,
@@ -24,7 +24,7 @@
       objects: []
     };
 
-    this.layers = [{
+    model.layers = [{
         name: 'Osmapa Topo',
         shortcut: 'os',
         url: 'http://{s}.tile.openstreetmap.pl/osmapa.pl/{z}/{x}/{y}.png',
@@ -56,7 +56,7 @@
         attribution: 'OpenTopoMap'
       }];
 
-    this.overlays = {
+    model.overlays = {
       sh: {
         name: 'Shading',
         shortcut: 'sh',

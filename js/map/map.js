@@ -3,76 +3,94 @@
   'use strict';
   angular
           .module('osmapa.map', ['ngAnimate', 'ngMaterial'])
-          .directive('osmapaMap', function (model, searchService) {
+          .directive('osmapaMap', function (model, infoboxService, mapService) {
             return {
               scope: {},
               templateUrl: 'js/map/map.tpl.html',
               replace: true,
               controller: 'MapController',
               controllerAs: 'ctrl',
-              link: MapLink,
+              link: mapLink,
               bindToController: true
             };
 
-            function MapLink(scope, iElement, iAttrs, ctrl) {
-              var map = model.map;
-              var show = model.show;
-
+            function mapLink(scope, iElement, iAttrs, ctrl) {
               ctrl.layers = new L.LayerGroup();
               ctrl.overlays = new L.LayerGroup();
               ctrl.shownObjects = new L.FeatureGroup();
 
               /* map config and init */
 
-              ctrl.map = L.map('map', {
+              var leaflet = L.map('map', {
                 minZoom: 3,
                 layers: [ctrl.overlays, ctrl.layers],
                 zoomControl: false,
                 detectRetina: true,
                 maxZoom: 19
-              }).setView([map.lat, map.lng], map.zoom);
+              }).setView([model.map.lat, model.map.lng], model.map.zoom);
 
-              ctrl.map.attributionControl.setPrefix("");
-              ctrl.map.addControl(new L.Control.Zoom({position: 'bottomleft'}));
-              ctrl.map.addLayer(ctrl.shownObjects);
+              leaflet.attributionControl.setPrefix("");
+              leaflet.addControl(new L.Control.Zoom({position: 'bottomleft'}));
+              leaflet.addLayer(ctrl.shownObjects);
 
-              ctrl.changeLayer(map.layer);
+              ctrl.changeLayer(model.map.layer);
               ctrl.updateHash();
+
+              /* interface */
+
+              ctrl.getMap = function () {
+                return leaflet;
+              };
+
+              ctrl.getMapBounds = function () {
+                return leaflet.getBounds();
+              };
+
+              ctrl.getMapLat = function () {
+                return leaflet.getCenter().lat;
+              };
+
+              ctrl.getMapLng = function () {
+                return leaflet.getCenter().lng;
+              };
+
+              ctrl.getMapZoom = function () {
+                return leaflet.getZoom();
+              };
+
+              ctrl.setMapBounds = function (bbox) {
+                leaflet.fitBounds(bbox);
+              };
+
+              ctrl.setMapView = function (view) {
+                leaflet.setView([view.lat, view.lng], view.zoom);
+              };
 
               /* events */
 
-              ctrl.map.on('moveend', function (e) {
+              leaflet.on('moveend', function (e) {
                 ctrl.updateHash();
               });
 
-              ctrl.map.on('click', function (e) {
-                if (ctrl.map.getZoom() > 13) {
-                  loadData(e);
+              leaflet.on('click', function (e) {
+                if (model.show.infobox) {
+                  infoboxService.hide();
+                } else if (leaflet.getZoom() > 13) {
+                  ctrl.loadData(e);
                 }
               });
 
               if (L.Browser.touch) {
-                ctrl.map.on('contextmenu', function (e) {
-                  if (ctrl.map.getZoom() > 13) {
-                    loadData(e);
+                leaflet.on('contextmenu', function (e) {
+                  if (leaflet.getZoom() > 13) {
+                    ctrl.loadData(e);
                   }
                 });
               }
 
-              function loadData(e) {
-                ctrl.mapClick(e);
-                show.infobox = true;
-                show.infoboxLoading = true;
-                searchService.overpass(e.latlng, ctrl.map.getBounds(), ctrl.map.getZoom()).then(function (data) {
-                  console.log(data);
-                  show.infoboxLoading = false;
-                  map.objects = data;
-                  map.objectsPosition = [e.latlng.lat, e.latlng.lng];
-                });
-              }
-
-              /* watches */
-
+              /**
+               * watch map
+               */
               scope.$watch(function () {
                 return model.map;
               }, function (newVal, oldVal) {
@@ -87,8 +105,11 @@
                 ctrl.changePosition(newVal);
               }, true);
 
+              /**
+               * watch action
+               */
               scope.$watch(function () {
-                return model.action;
+                return mapService.action;
               }, function (value) {
 
                 if (value.type === "ZOOM_TO_BOUNDARY") {
@@ -100,25 +121,28 @@
                   ctrl.geoLocalize();
                 }
                 else if (value.type === "DRAW_OBJECT") {
-                  ctrl.shownObjects.clearLayers();
-                  if (value.data && (value.data._latlng || value.data._latlngs)) {
+                  if (value.clean) {
+                    ctrl.shownObjects.clearLayers();
+                  }
+                  if (value.data) {
                     ctrl.shownObjects.addLayer(value.data);
                   }
                 }
-                model.action = {};
+                mapService.action = {};
               }, true);
             }
 
           })
           .controller('MapController', MapController);
 
-  function MapController(model, $scope, $location, $timeout, $rootScope) {
+  function MapController(model, $scope, $location, $timeout, $rootScope, searchService, infoboxService) {
     var ctrl = this;
 
     ctrl.changeLayer = changeLayer;
     ctrl.changeOverlay = changeOverlay;
     ctrl.changePosition = changePosition;
     ctrl.geoLocalize = geoLocalize;
+    ctrl.loadData = loadData;
     ctrl.mapClick = mapClick;
     ctrl.updateHash = updateHash;
     ctrl.zoomToBoundary = zoomToBoundary;
@@ -164,29 +188,50 @@
 
       if (latChange || lngChange || zoomChange) {
         $timeout(function () {
-          ctrl.map.setView([position.lat, position.lon || position.lng], position.z || position.zoom);
+          ctrl.setMapView({
+            lat: position.lat,
+            lng: position.lon || position.lng,
+            zoom: position.z || position.zoom
+          });
         }, 0);
       }
 
-      latChange = model.map.lat != ctrl.map.getCenter().lat.toFixed(5);
-      lngChange = model.map.lng != ctrl.map.getCenter().lng.toFixed(5);
-      zoomChange = model.map.zoom != ctrl.map.getZoom();
+      latChange = model.map.lat != ctrl.getMapLat().toFixed(5);
+      lngChange = model.map.lng != ctrl.getMapLng().toFixed(5);
+      zoomChange = model.map.zoom != ctrl.getMapZoom();
 
       if (latChange || lngChange || zoomChange) {
         $timeout(function () {
-          ctrl.map.setView([model.map.lat, model.map.lng], model.map.zoom);
+          ctrl.setMapView({
+            lat: model.map.lat,
+            lng: model.map.lng,
+            zoom: model.map.zoom
+          });
         }, 0);
       }
     }
 
     function geoLocalize() {
-      ctrl.map.locate({setView: true, maxZoom: 16});
+      ctrl.getMap().locate({setView: true, maxZoom: 16});
     }
 
+    function loadData(e) {
+      mapClick(e);
+      infoboxService.show();
+      infoboxService.setLoadingState(true);
+      ctrl.shownObjects.clearLayers();
+      searchService.overpass(e.latlng, ctrl.getMapBounds(), ctrl.getMapZoom()).then(function (data) {
+        console.log(data);
+        infoboxService.setLoadingState(false);
+        model.map.objects = data;
+        model.map.objectsPosition = [e.latlng.lat, e.latlng.lng];
+      });
+    }
+    
     function mapClick(e) {
       // http://codepen.io/440design/pen/iEztk
       var ink;
-      var mapContainer = ctrl.map._container;
+      var mapContainer = ctrl.getMap()._container;
 
       if (!mapContainer.getElementsByClassName("map-ripple-ink").length) {
         ink = document.createElement("span");
@@ -208,9 +253,9 @@
     function updateHash() {
       $timeout(function () {
         $rootScope.$apply(function () {
-          model.map.lat = (ctrl.map.getCenter().lat).toFixed(5);
-          model.map.lng = (ctrl.map.getCenter().lng).toFixed(5);
-          model.map.zoom = ctrl.map.getZoom();
+          model.map.lat = ctrl.getMapLat().toFixed(5);
+          model.map.lng = ctrl.getMapLng().toFixed(5);
+          model.map.zoom = ctrl.getMapZoom();
 
           var hash = '/lat=' + model.map.lat + '&lon=' + model.map.lng;
           hash += '&z=' + model.map.zoom + '&m=' + model.map.layer;
@@ -229,7 +274,7 @@
         return;
       }
       $timeout(function () {
-        ctrl.map.fitBounds(bbox);
+        ctrl.setMapBounds(bbox);
       }, 0);
     }
 

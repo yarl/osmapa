@@ -3,7 +3,7 @@
 (function () {
   'use strict';
   angular
-          .module('osmapa.search', ['ngAnimate', 'ngMaterial'])
+          .module('osmapa.search', ['ngAnimate', 'ngMaterial', 'osmapa.infobox', 'osmapa.map'])
           .directive('osmapaSearch', function () {
             return {
               scope: {},
@@ -18,7 +18,7 @@
           .filter('getAddress', GetAddressFilter)
           .filter('getName', GetNameFilter);
 
-  function SearchController(model, searchService) {
+  function SearchController(model, searchService, infoboxService, mapService) {
     var ctrl = this;
 
     ctrl.querySearch = querySearch;
@@ -28,6 +28,7 @@
     ////////////
 
     function querySearch(query) {
+      infoboxService.hide();
       var promise;
       promise = searchService.search(query, {
         lat: model.map.lat,
@@ -42,10 +43,11 @@
       if (item) {
         if (item.properties.extent) {
           var bbox = item.properties.extent;
-          model.action = {
-            type: "ZOOM_TO_BOUNDARY",
-            data: [[bbox[1], bbox[0]], [bbox[3], bbox[2]]]
-          };
+          mapService.zoomToBoundary({
+            minlat: bbox[1], minlon: bbox[0],
+            maxlat: bbox[3], maxlon: bbox[2]
+          });
+
         } else {
           model.map.lat = item.geometry.coordinates[1];
           model.map.lng = item.geometry.coordinates[0];
@@ -54,8 +56,8 @@
 
         ctrl.searchText = "";
         
-        model.show.infobox = true;
-        model.show.infoboxLoading = false;
+        infoboxService.show();
+        infoboxService.setLoadingState(false);
         model.map.objects = [{
             id: item.properties.osm_id,
             lat: item.geometry.coordinates[1],
